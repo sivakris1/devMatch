@@ -37,7 +37,7 @@ router.post('/register',[
 
         const token = generateToken(user._id);
 
-         res.status(201).json({
+        return res.status(201).json({
       message: 'User registered successfully',
       token,
       user: {
