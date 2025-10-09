@@ -6,7 +6,7 @@ function App() {
         <p className="text-xl">SUCCESS! Tailwind v4 is working!</p>
       </div>
       <button className="bg-green-500 hover:bg-green-700 px-6 py-3 rounded font-bold transition-colors">
-        Green Button Test
+        Green Button. 
       </button>
     </div>
   )
