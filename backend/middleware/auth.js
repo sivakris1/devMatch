@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken'
 import User from '../models/User.js'
 
-const auth = async(req,res) => {
+const auth = async(req,res,next) => {
     try {
         const authHeader = req.header('Authorization');
 
@@ -13,7 +13,7 @@ const auth = async(req,res) => {
 
         const decoded = jwt.verify(token,process.env.JWT_SECRET);
 
-        req.user = {userId : decoded.userId}
+        req.userId = decoded.userId;
 
         next();
     } catch (error) {
