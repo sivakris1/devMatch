@@ -6,7 +6,7 @@ const router = express.Router()
 
 router.get('/',auth, async(req,res)=>{
     try {
-        const user = await User.findById(req.user._id).select('-password')
+        const user = await User.findById(req.userId).select('-password')
 
         if(!user){
            return res.status(404).json({ message: 'User not found' });
@@ -56,10 +56,10 @@ router.put('/',auth, async(req,res)=>{
     if (skills !== undefined) updatedFields.skills = skills
     if (experienceLevel !== undefined) updatedFields.experienceLevel = experienceLevel
     if (bio !== undefined) updatedFields.bio = bio 
-    if (location !== undefined) updateFields.location = location;
-    if (github !== undefined) updateFields.github = github;
-    if (linkedin !== undefined) updateFields.linkedin = linkedin;
-    if (portfolio !== undefined) updateFields.portfolio = portfolio;
+    if (location !== undefined) updatedFields.location = location;
+    if (github !== undefined) updatedFields.github = github;
+    if (linkedin !== undefined) updatedFields.linkedin = linkedin;
+    if (portfolio !== undefined) updatedFields.portfolio = portfolio;
 
     const updatedUser = await User.findByIdAndUpdate(req.user._id, {$set : updatedFields}, { new: true, runValidators: true }
     ).select('-password');
