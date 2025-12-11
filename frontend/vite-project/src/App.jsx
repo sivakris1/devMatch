@@ -1,6 +1,8 @@
 // src/App.jsx
 import { Routes, Route, Navigate } from 'react-router-dom';
 import LoginPage from './pages/LoginPage';
+import ProfilePage from './pages/ProfilePage';
+import ProtectedRoute from './components/ProtectedRoute';
 
 function App() {
   return (
@@ -11,7 +13,11 @@ function App() {
       {/* Login route */}
       <Route path="/login" element={<LoginPage />} />
 
-      {/* Later we'll add /register, /profile, /developers etc. */}
+      <Route path='/profile' element={
+        <ProtectedRoute>
+          <ProfilePage/>
+        </ProtectedRoute>
+      } />
     </Routes>
   );
 }
