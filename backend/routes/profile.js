@@ -61,8 +61,16 @@ router.put('/',auth, async(req,res)=>{
     if (linkedin !== undefined) updatedFields.linkedin = linkedin;
     if (portfolio !== undefined) updatedFields.portfolio = portfolio;
 
-    const updatedUser = await User.findByIdAndUpdate(req.user._id, {$set : updatedFields}, { new: true, runValidators: true }
+    // const updatedUser = await User.findByIdAndUpdate(req.user._id, {$set : updatedFields}, { new: true, runValidators: true }
+    // ).select('-password');
+
+
+    const updatedUser = await User.findByIdAndUpdate(
+    req.userId,
+    { $set: updatedFields },
+    { new: true, runValidators: true }
     ).select('-password');
+
 
      if (!updatedUser) {
       return res.status(404).json({ message: 'User not found' });
