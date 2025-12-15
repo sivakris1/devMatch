@@ -4,6 +4,12 @@ import express from 'express';
 
 const router = express.Router()
 
+console.log('🔥 PROFILE ROUTES LOADED 🔥');
+
+
+
+
+
 router.get('/',auth, async(req,res)=>{
     try {
         const user = await User.findById(req.userId).select('-password')
@@ -63,6 +69,8 @@ router.put('/',auth, async(req,res)=>{
 
     // const updatedUser = await User.findByIdAndUpdate(req.user._id, {$set : updatedFields}, { new: true, runValidators: true }
     // ).select('-password');
+
+ 
 
 
     const updatedUser = await User.findByIdAndUpdate(
