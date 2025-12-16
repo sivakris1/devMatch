@@ -119,7 +119,7 @@ router.get('/:userId', async(req,res) => {
       return res.status(404).json({ message: 'User not found' });
     }
 
-    res.json({
+   return res.json({
       success: true,
       data: user
     });

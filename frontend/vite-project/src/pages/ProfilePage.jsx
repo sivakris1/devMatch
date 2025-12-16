@@ -3,14 +3,18 @@ import { useEffect, useState } from 'react';
 import api from '../api/client';
 import { useAuth } from '../context/AuthContext';
 
+
 function ProfilePage() {
-  const { user: authUser, logout } = useAuth();
+
+  const { user: authUser, logout, updatedUser } = useAuth();
+  // const { user: authUser, logout } = useAuth();
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
 
   //for editing the profile
+  const [isEditing,setIsEditing] = useState(false);
   const [formData, setFormData] = useState(null);
   const [saving, setSaving] = useState(false);
   const [success, setSuccess] = useState('');
@@ -23,6 +27,7 @@ function ProfilePage() {
         const res = await api.get('/profile');
         setProfile(res.data.data);
         setFormData(res.data.data);
+        updatedUser(res.data.data);
 
       } catch (err) {
         console.error(err);
@@ -142,7 +147,7 @@ function ProfilePage() {
           <textarea
             value={formData.bio || ''}
             onChange={(e) =>
-              setFormData({ ...formData, bio: e.target.value })
+              setFormData({ ...formData, bio: e.target.value }) 
             }
           />
         </>

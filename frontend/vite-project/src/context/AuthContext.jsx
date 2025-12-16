@@ -33,6 +33,12 @@ export const AuthProvider = ({ children }) => {
     setUser(newUser);
   };
 
+
+  //updating the user with all values from profile edit
+  const updatedUser = (updatedUser) => {
+    setUser(updatedUser);
+  }
+
   // logout clears state and storage
   const logout = () => {
     setToken(null);
@@ -45,6 +51,7 @@ export const AuthProvider = ({ children }) => {
     isAuthenticated: !!token,
     login,
     logout,
+    updatedUser
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
