@@ -35,7 +35,7 @@ export const AuthProvider = ({ children }) => {
 
 
   //updating the user with all values from profile edit
-  const updatedUser = (updatedUser) => {
+  const updateUser = (updatedUser) => {
     setUser(updatedUser);
   }
 
@@ -51,7 +51,7 @@ export const AuthProvider = ({ children }) => {
     isAuthenticated: !!token,
     login,
     logout,
-    updatedUser
+    updateUser
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

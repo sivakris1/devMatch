@@ -6,7 +6,7 @@ import { useAuth } from '../context/AuthContext';
 
 function ProfilePage() {
 
-  const { user: authUser, logout, updatedUser } = useAuth();
+  const { user: authUser, logout, updateUser } = useAuth();
   // const { user: authUser, logout } = useAuth();
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -27,7 +27,7 @@ function ProfilePage() {
         const res = await api.get('/profile');
         setProfile(res.data.data);
         setFormData(res.data.data);
-        updatedUser(res.data.data);
+        updateUser(res.data.data);
 
       } catch (err) {
         console.error(err);
@@ -53,10 +53,11 @@ function ProfilePage() {
 
     try {
       const res = await api.put('/profile', formData);
-      const updatedUser = res.data.data;
+      const savedUser = res.data.data;
 
-      setProfile(updatedUser);
-      setFormData(updatedUser);
+      setProfile(savedUser);
+      setFormData(savedUser);
+      updateUser(savedUser);
       setIsEditing(false);
       setSuccess('Profile updated successfully!');
     } catch (err) {
