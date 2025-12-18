@@ -19,6 +19,8 @@ function ProfilePage() {
   const [saving, setSaving] = useState(false);
   const [success, setSuccess] = useState('');
 
+  const [newSkill,setNewSkill] = useState('');
+
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -157,6 +159,60 @@ function ProfilePage() {
       {/* Messages */}
       {error && <p style={{ color: 'red' }}>{error}</p>}
       {success && <p style={{ color: 'green' }}>{success}</p>}
+
+      
+
+      {/* skills */}
+
+      <div>
+        {!isEditing ? (
+           <p>
+             {(user?.skills && user.skills.length > 0)
+             ? user.skills.join(', ')
+             : 'No skills yet'}
+           </p>
+        ) : (
+           <>
+           <div>
+            {(formData.skills || []) .map((skill)=> 
+            <span key={skill}>
+              {skill}
+
+              
+
+            </span>
+            )}
+           </div>
+
+           {/* add new skill  */}
+
+           <input type="text" value={newSkill} 
+           placeholder='Add Skill'
+            onChange={(e) => setNewSkill(e.target.value)} />
+
+          <button
+          onClick={ () => {
+            const skill = newSkill.trim();
+            if(!skill) return;
+            if(formData.skills.includes(skill)) return;
+
+            setFormData({
+              ...formData,
+              skills : [...formData.skills,skill]
+            })
+            setNewSkill('')
+          }}
+          >
+            Add 
+          </button>
+
+
+           </>
+        )
+
+        }
+      </div>
+
 
       {/* Actions */}
       <div style={{ marginTop: 20 }}>
