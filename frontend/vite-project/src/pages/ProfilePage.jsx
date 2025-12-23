@@ -4,212 +4,175 @@ import api from "../api/client";
 import { useAuth } from "../context/AuthContext";
 
 function ProfilePage() {
-  const { user: authUser, logout, updateUser } = useAuth();
-  // const { user: authUser, logout } = useAuth();
+  const { logout, updateUser } = useAuth();
+
   const [profile, setProfile] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
-
-  //for editing the profile
-  const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState(null);
-  const [saving, setSaving] = useState(false);
-  const [success, setSuccess] = useState("");
 
+  const [isEditing, setIsEditing] = useState(false);
   const [newSkill, setNewSkill] = useState("");
 
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
+
+  // 🔹 Fetch profile ONCE
   useEffect(() => {
     const fetchProfile = async () => {
       try {
         const res = await api.get("/profile");
-        setProfile(res.data.data);
 
-        setProfile(res.data.data);
-        setFormData({
+        const normalizedUser = {
           ...res.data.data,
           skills: res.data.data.skills || [],
-        });
-        updateUser({
-          ...res.data.data,
-          skills: res.data.data.skills || [],
-        });
+        };
+
+        setProfile(normalizedUser);
+        setFormData(normalizedUser);
+        updateUser(normalizedUser);
       } catch (err) {
-        console.error(err);
-        setError(err.response?.data?.message || "Failed to load profile");
-        if (err.response?.status === 401) {
-          // token invalid/expired → force logout
-          logout();
-        }
+        setError("Failed to load profile");
+        if (err.response?.status === 401) logout();
       } finally {
         setLoading(false);
       }
     };
 
     fetchProfile();
-  }, [logout]);
+  }, [logout, updateUser]);
 
-  // Save profile
+  // 🔹 Save profile
   const handleSave = async () => {
     setSaving(true);
     setError("");
     setSuccess("");
 
+    console.log("Saving formData.skills:", formData.skills);
+
     try {
       const res = await api.put("/profile", formData);
-      const savedUser = res.data.data;
 
-      setProfile({
-        ...savedUser,
-        skills: savedUser.skills || [],
-      });
-      setFormData({
-        ...savedUser,
-        skills: savedUser.skills || [],
-      });
-      updateUser({
-        ...savedUser,
-        skills: savedUser.skills || [],
-      });
+      const savedUser = {
+        ...res.data.data,
+        skills: res.data.data.skills || [],
+      };
+
+      setProfile(savedUser);
+      setFormData(savedUser);
+      updateUser(savedUser);
 
       setIsEditing(false);
       setSuccess("Profile updated successfully!");
     } catch (err) {
-      console.error(err);
-      setError(err.response?.data?.message || "Failed to update profile");
+      setError("Failed to update profile");
     } finally {
       setSaving(false);
     }
   };
 
-  // Cancel editing
+  // 🔹 Cancel edit
   const handleCancel = () => {
-    setFormData(profile); // revert changes
+    setFormData(profile); // restore LAST SAVED data
     setIsEditing(false);
     setError("");
     setSuccess("");
   };
 
-  if (loading) return <p style={{ textAlign: "center" }}>Loading profile...</p>;
+  if (loading) return <p style={{ textAlign: "center" }}>Loading...</p>;
 
-  if (error && !profile) {
-    return (
-      <div style={{ textAlign: "center", marginTop: 40 }}>
-        <p style={{ color: "red" }}>{error}</p>
-        <button onClick={logout}>Logout</button>
-      </div>
-    );
-  }
-
-  const user = profile || authUser;
+  const user = isEditing ? formData : profile;
 
   return (
     <div style={{ maxWidth: 600, margin: "40px auto" }}>
       <h1>My Profile</h1>
 
-      {/* Name & Email (view only) */}
-      <p>
-        <strong>Name:</strong> {user?.name}
-      </p>
-      <p>
-        <strong>Email:</strong> {user?.email}
-      </p>
+      <p><strong>Name:</strong> {user.name}</p>
+      <p><strong>Email:</strong> {user.email}</p>
 
       {/* Experience */}
       {!isEditing ? (
-        <p>
-          <strong>Experience:</strong> {user?.experienceLevel || "Not set"}
-        </p>
+        <p><strong>Experience:</strong> {user.experienceLevel || "Not set"}</p>
       ) : (
-        <>
-          <label>Experience Level</label>
-          <select
-            value={formData.experienceLevel}
-            onChange={(e) =>
-              setFormData({ ...formData, experienceLevel: e.target.value })
-            }
-          >
-            <option value="Beginner">Beginner</option>
-            <option value="Intermediate">Intermediate</option>
-            <option value="Advanced">Advanced</option>
-            <option value="Expert">Expert</option>
-          </select>
-        </>
+        <select
+          value={formData.experienceLevel}
+          onChange={(e) =>
+            setFormData({ ...formData, experienceLevel: e.target.value })
+          }
+        >
+          <option value="Beginner">Beginner</option>
+          <option value="Intermediate">Intermediate</option>
+          <option value="Advanced">Advanced</option>
+          <option value="Expert">Expert</option>
+        </select>
       )}
 
       {/* Location */}
       {!isEditing ? (
-        <p>
-          <strong>Location:</strong> {user?.location || "Not set"}
-        </p>
+        <p><strong>Location:</strong> {user.location || "Not set"}</p>
       ) : (
-        <>
-          <label>Location</label>
-          <input
-            value={formData.location || ""}
-            onChange={(e) =>
-              setFormData({ ...formData, location: e.target.value })
-            }
-          />
-        </>
+        <input
+          value={formData.location || ""}
+          onChange={(e) =>
+            setFormData({ ...formData, location: e.target.value })
+          }
+        />
       )}
 
       {/* Bio */}
       {!isEditing ? (
-        <p>
-          <strong>Bio:</strong> {user?.bio || "Not set"}
-        </p>
+        <p><strong>Bio:</strong> {user.bio || "Not set"}</p>
       ) : (
-        <>
-          <label>Bio</label>
-          <textarea
-            value={formData.bio || ""}
-            onChange={(e) => setFormData({ ...formData, bio: e.target.value })}
-          />
-        </>
+        <textarea
+          value={formData.bio || ""}
+          onChange={(e) =>
+            setFormData({ ...formData, bio: e.target.value })
+          }
+        />
       )}
 
-      {/* Messages */}
-      {error && <p style={{ color: "red" }}>{error}</p>}
-      {success && <p style={{ color: "green" }}>{success}</p>}
-
-      {/* skills */}
-
-      <div>
+      {/* Skills */}
+      <div style={{ marginTop: 20 }}>
         {!isEditing ? (
           <p>
-            {user?.skills && user.skills.length > 0
-              ? user.skills.join(", ")
-              : "No skills yet"}
+            <strong>Skills:</strong>{" "}
+            {user.skills.length > 0 ? user.skills.join(", ") : "No skills yet"}
           </p>
         ) : (
           <>
-            <div>
-              {(formData.skills || []).map((skill) => (
-                <span key={skill}>{skill}</span>
+            <div style={{ marginBottom: 10 }}>
+              {formData.skills.map((skill) => (
+                <span
+                  key={skill}
+                  style={{
+                    padding: "5px 10px",
+                    background: "#eee",
+                    marginRight: 5,
+                    borderRadius: 4,
+                  }}
+                >
+                  {skill}
+                </span>
               ))}
             </div>
-
-            {/* add new skill  */}
 
             <input
               type="text"
               value={newSkill}
-              placeholder="Add Skill"
+              placeholder="Add skill"
               onChange={(e) => setNewSkill(e.target.value)}
             />
 
             <button
+            type="button"
               onClick={() => {
                 const skill = newSkill.trim();
                 if (!skill) return;
-
-                const existingSkills = formData.skills || [];
-
-                if (existingSkills.includes(skill)) return;
+                if (formData.skills.includes(skill)) return;
 
                 setFormData({
                   ...formData,
-                  skills: [...existingSkills, skill],
+                  skills: [...formData.skills, skill],
                 });
 
                 setNewSkill("");
@@ -221,13 +184,17 @@ function ProfilePage() {
         )}
       </div>
 
+      {/* Messages */}
+      {error && <p style={{ color: "red" }}>{error}</p>}
+      {success && <p style={{ color: "green" }}>{success}</p>}
+
       {/* Actions */}
       <div style={{ marginTop: 20 }}>
         {!isEditing ? (
           <button onClick={() => setIsEditing(true)}>Edit Profile</button>
         ) : (
           <>
-            <button onClick={handleSave} disabled={saving}>
+            <button type="button" onClick={handleSave} disabled={saving}>
               {saving ? "Saving..." : "Save"}
             </button>
             <button onClick={handleCancel} disabled={saving}>
