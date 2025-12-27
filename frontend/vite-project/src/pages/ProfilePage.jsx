@@ -32,6 +32,25 @@ export default function ProfilePage() {
     load();
   }, [logout]);
 
+  // const remove = (Rskill) => {
+
+    const remove = (Rskill) => {
+  setFormData(prev => ({
+    ...prev,
+    skills: prev.skills.filter(skill => skill !== Rskill),
+  }));
+};
+
+  //   const updated =  formData.skills.filter(skill => skill !== Rskill) 
+
+  //   setFormData({
+  //     ...formData,
+  //     skills : updated
+  //   })
+  //   console.log(updated)
+  //   console.log(formData)
+  // }
+
   // 🔥 SAVE PROFILE (ONLY BACKEND TRUTH)
   const handleSave = async () => {
     setSaving(true);
@@ -78,7 +97,7 @@ export default function ProfilePage() {
         <>
           <div>
             {formData.skills.map(s => (
-              <span key={s} style={{ marginRight: 6 }}>{s}</span>
+              <span key={s} style={{ marginRight: 6 }}>{s} <button onClick={()=> remove(s)}>❌</button> </span>
             ))}
           </div>
 
