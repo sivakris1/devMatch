@@ -12,7 +12,7 @@ export default function ProfilePage() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
 
-  // 🔥 FETCH PROFILE ONCE
+  // FETCH PROFILE ONCE
   useEffect(() => {
     const load = async () => {
       try {
@@ -32,31 +32,20 @@ export default function ProfilePage() {
     load();
   }, [logout]);
 
-  // const remove = (Rskill) => {
+  // REMOVE SKILL (UI ONLY)
+  const removeSkill = (skillToRemove) => {
+    setFormData((prev) => ({
+      ...prev,
+      skills: prev.skills.filter((s) => s !== skillToRemove),
+    }));
+  };
 
-    const remove = (Rskill) => {
-  setFormData(prev => ({
-    ...prev,
-    skills: prev.skills.filter(skill => skill !== Rskill),
-  }));
-};
-
-  //   const updated =  formData.skills.filter(skill => skill !== Rskill) 
-
-  //   setFormData({
-  //     ...formData,
-  //     skills : updated
-  //   })
-  //   console.log(updated)
-  //   console.log(formData)
-  // }
-
-  // 🔥 SAVE PROFILE (ONLY BACKEND TRUTH)
+  // SAVE TO DATABASE
   const handleSave = async () => {
     setSaving(true);
     try {
       await api.put("/profile", {
-        skills: formData.skills,
+        skills: formData.skills,   // ✅ CORRECT
         experienceLevel: formData.experienceLevel,
         bio: formData.bio,
         location: formData.location,
@@ -92,19 +81,24 @@ export default function ProfilePage() {
 
       {/* SKILLS */}
       {!isEditing ? (
-        <p><b>Skills:</b> {user.skills.length ? user.skills.join(", ") : "No skills yet"}</p>
+        <p>
+          <b>Skills:</b>{" "}
+          {user.skills.length ? user.skills.join(", ") : "No skills yet"}
+        </p>
       ) : (
         <>
           <div>
-            {formData.skills.map(s => (
-              <span key={s} style={{ marginRight: 6 }}>{s} <button onClick={()=> remove(s)}>❌</button> </span>
+            {formData.skills.map((s) => (
+              <span key={s} style={{ marginRight: 6 }}>
+                {s} <button onClick={() => removeSkill(s)}>❌</button>
+              </span>
             ))}
           </div>
 
           <input
             value={newSkill}
             placeholder="Add skill"
-            onChange={e => setNewSkill(e.target.value)}
+            onChange={(e) => setNewSkill(e.target.value)}
           />
 
           <button
@@ -134,17 +128,21 @@ export default function ProfilePage() {
             <button onClick={handleSave} disabled={saving}>
               {saving ? "Saving..." : "Save"}
             </button>
-            <button onClick={() => {
-              setFormData(profile);
-              setIsEditing(false);
-            }}>
+            <button
+              onClick={() => {
+                setFormData(profile);
+                setIsEditing(false);
+              }}
+            >
               Cancel
             </button>
           </>
         )}
       </div>
 
-      <button style={{ marginTop: 30 }} onClick={logout}>Logout</button>
+      <button style={{ marginTop: 30 }} onClick={logout}>
+        Logout
+      </button>
     </div>
   );
 }

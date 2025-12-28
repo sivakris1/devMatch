@@ -119,13 +119,14 @@ router.put('/', auth, async (req, res) => {
       portfolio,
     } = req.body;
 
+    console.log("Incoming skills:", req.body.skills);
+
+
     const update = {};
 
     // ✅ SAFE SKILLS UPDATE (NO MORE WIPES)
-    if (Array.isArray(skills) && skills.length > 0) {
-      update.$addToSet = {
-        skills: { $each: skills },
-      };
+    if (Array.isArray(skills)) {
+      update.skills = skills;
     }
 
     // other fields (normal replace is fine)
@@ -149,7 +150,7 @@ router.put('/', auth, async (req, res) => {
 
     const updatedUser = await User.findByIdAndUpdate(
       req.userId,
-      update,
+      {$set:update},
       { new: true, runValidators: true }
     ).select('-password');
 
