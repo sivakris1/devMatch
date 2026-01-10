@@ -3,6 +3,7 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 import LoginPage from './pages/LoginPage';
 import ProfilePage from './pages/ProfilePage';
 import ProtectedRoute from './components/ProtectedRoute';
+import DevelopersPage from './pages/DevelopersPage';
 
 function App() {
   return (
@@ -18,6 +19,9 @@ function App() {
           <ProfilePage/>
         </ProtectedRoute>
       } />
+
+      <Route path="/developers" element={<DevelopersPage />} />
+
     </Routes>
   );
 }
