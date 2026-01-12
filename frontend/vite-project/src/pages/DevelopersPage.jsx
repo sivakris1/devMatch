@@ -7,6 +7,29 @@ const DevelopersPage = () => {
   const [developers, setDevelopers] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  const [skills,setSkills] = useState("");
+  const [experienceLevel,setExperienceLevel] = useState("");
+  const [location,setLocation] = useState("");
+
+  const searchDevelopers = async() => {
+      try {
+
+        const payload = {
+          skills : skills?skills.split(",").map(s => s.trim()) :  undefined,
+          experienceLevel: experienceLevel || undefined,
+          location: location || undefined,
+        }
+        const res = await api.post('/developers/search',payload);
+        setDevelopers(res.data.data.developers);
+        console.log(res)
+
+      } catch (err) {
+        console.error("Failed to fetch developers", err);
+      } finally {
+        setLoading(false);
+      }
+    }
+
   useEffect(() => {
     const fetchDevelopers = async () => {
       try {
@@ -20,13 +43,43 @@ const DevelopersPage = () => {
 
     };
 
+
     fetchDevelopers();
   }, []);
 
     if (loading) return <p>Loading developers...</p>;
 
   return (
+
+    
     <div>
+
+      <input
+  placeholder="Skills (comma separated)"
+  value={skills}
+  onChange={(e) => setSkills(e.target.value)}
+/>
+
+<select
+  value={experienceLevel}
+  onChange={(e) => setExperienceLevel(e.target.value)}
+>
+  <option value="">Any level</option>
+  <option value="Beginner">Beginner</option>
+  <option value="Intermediate">Intermediate</option>
+  <option value="Advanced">Advanced</option>
+  <option value="Expert">Expert</option>
+</select>
+
+<input
+  placeholder="Location"
+  value={location}
+  onChange={(e) => setLocation(e.target.value)}
+/>
+
+<button onClick={()=>searchDevelopers()}>Search</button>
+
+
       <h2>Recommended Developers</h2>
 
       {developers.length === 0 ? (
