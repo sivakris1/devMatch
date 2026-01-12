@@ -4,6 +4,7 @@ import LoginPage from './pages/LoginPage';
 import ProfilePage from './pages/ProfilePage';
 import ProtectedRoute from './components/ProtectedRoute';
 import DevelopersPage from './pages/DevelopersPage';
+import DevelopersProfile from './pages/DevelopersProfile';
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
       } />
 
       <Route path="/developers" element={<DevelopersPage />} />
+      <Route path='/developers/:id' element={<DevelopersProfile/>} />
 
     </Routes>
   );

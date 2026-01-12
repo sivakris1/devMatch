@@ -2,8 +2,11 @@ import React from "react";
 import { useEffect } from "react";
 import api from "../api/client";
 import { useState } from "react";
+import { Navigate, useNavigate } from "react-router-dom";
 
 const DevelopersPage = () => {
+
+  const navigate = useNavigate();
   const [developers, setDevelopers] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -86,7 +89,11 @@ const DevelopersPage = () => {
         <p>No recommendations found</p>
       ) : (
         developers.map((dev) => (
-          <div key={dev._id} style={{ border: "1px solid #ccc", margin: 10, padding: 10 }}>
+          <div key={dev._id} style={{ border: "1px solid #ccc", margin: 10, padding: 10 }} 
+          onClick={() => navigate(`/developers/${dev._id}`)}
+
+          >
+            
             <p><b>Name:</b> {dev.name}</p>
             <p><b>Experience:</b> {dev.experienceLevel}</p>
             <p><b>Skills:</b> {dev.skills.join(", ")}</p>
