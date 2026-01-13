@@ -5,6 +5,7 @@ import ProfilePage from './pages/ProfilePage';
 import ProtectedRoute from './components/ProtectedRoute';
 import DevelopersPage from './pages/DevelopersPage';
 import DevelopersProfile from './pages/DevelopersProfile';
+import RegisterPage from './pages/RegisterPage';
 
 function App() {
   return (
@@ -12,8 +13,12 @@ function App() {
       {/* Default route → go to /login for now */}
       <Route path="/" element={<Navigate to="/login" replace />} />
 
+
+
       {/* Login route */}
       <Route path="/login" element={<LoginPage />} />
+
+      <Route path="/register" element={<RegisterPage />} />
 
       <Route path='/profile' element={
         <ProtectedRoute>
