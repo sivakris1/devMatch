@@ -83,7 +83,8 @@ const RegisterPage = () => {
         )}
 
         <button type="submit" disabled={loading}>
-          {loading ? 'signing in...' : 'SignUp'}
+          {loading ? 'Signing up...' : 'Sign Up'}
+
         </button>
       </form>
     </div>
