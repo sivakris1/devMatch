@@ -90,8 +90,7 @@ const DevelopersPage = () => {
       ) : (
         developers.map((dev) => (
           <div key={dev._id} style={{ border: "1px solid #ccc", margin: 10, padding: 10 }} 
-          onClick={() => navigate(`/developers/${dev._id}`)}
-
+          onClick={() => {navigate(`/developers/${dev._id}`), console.log(dev)} }
           >
             
             <p><b>Name:</b> {dev.name}</p>
