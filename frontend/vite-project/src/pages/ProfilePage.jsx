@@ -45,13 +45,13 @@ export default function ProfilePage() {
     setSaving(true);
     try {
       await api.put("/profile", {
-        skills: formData.skills,   // ✅ CORRECT
+        skills: formData.skills, // ✅ CORRECT
         experienceLevel: formData.experienceLevel,
         bio: formData.bio,
         location: formData.location,
         github: formData.github,
-        linkedin : formData.linkedin,
-        portfolio : formData.portfolio
+        linkedin: formData.linkedin,
+        portfolio: formData.portfolio,
       });
 
       const fresh = await api.get("/profile");
@@ -76,56 +76,56 @@ export default function ProfilePage() {
     <div style={{ maxWidth: 600, margin: "40px auto" }}>
       <h2>My Profile</h2>
 
-      <p><b>Name:</b> {user.name}</p>
-      <p><b>Email:</b> {user.email}</p>
-      <p><b>Experience:</b> {user.experienceLevel}</p>
-      <p><b>Location:</b> {user.location || "Not set"}</p>
-      <p><b>Bio:</b> {user.bio || "Not set"}</p>
+      {/* Details of the User */}
       <p>
-  <b>Github:</b>{" "}
-  {user.github ? (
-    <a
-      href={user.github}
-      target="_blank"
-      rel="noopener noreferrer"
-    >
-      {user.github}
-    </a>
-  ) : (
-    "Not set"
-  )}
-</p>
+        <b>Name:</b> {user.name}
+      </p>
+      <p>
+        <b>Email:</b> {user.email}
+      </p>
+      <p>
+        <b>Experience:</b> {user.experienceLevel}
+      </p>
+      <p>
+        <b>Location:</b> {user.location || "Not set"}
+      </p>
+      <p>
+        <b>Bio:</b> {user.bio || "Not set"}
+      </p>
+
+      {/* Clickable Social Links from here */}
+      <p>
+        <b>Github:</b>{" "}
+        {user.github ? (
+          <a href={user.github} target="_blank" rel="noopener noreferrer">
+            {user.github}
+          </a>
+        ) : (
+          "Not set yet"
+        )}
+      </p>
 
       <p>
-  <b>Linkedin:</b>{" "}
-  {user.linkedin ? (
-    <a
-      href={user.linkedin}
-      target="_blank"
-      rel="noopener noreferrer"
-    >
-     {user.linkedin}
-    </a>
-  ) : (
-    "Not set"
-  )}
-</p>
+        <b>Linkedin:</b>{" "}
+        {user.linkedin ? (
+          <a href={user.linkedin} target="_blank" rel="noopener noreferrer">
+            {user.linkedin}
+          </a>
+        ) : (
+          "Not set yet"
+        )}
+      </p>
 
       <p>
-  <b>Portfolio:</b>{" "}
-  {user.portfolio ? (
-    <a
-      href={user.portfolio}
-      target="_blank"
-      rel="noopener noreferrer"
-    >
-      {user.portfolio}
-    </a>
-  ) : (
-    "Not set"
-  )}
-</p>
-
+        <b>Portfolio:</b>{" "}
+        {user.portfolio ? (
+          <a href={user.portfolio} target="_blank" rel="noopener noreferrer">
+            {user.portfolio}
+          </a>
+        ) : (
+          "Not set yet"
+        )}
+      </p>
 
       {/* SKILLS */}
       {!isEditing ? (
@@ -173,48 +173,44 @@ export default function ProfilePage() {
           <button onClick={() => setIsEditing(true)}>Edit</button>
         ) : (
           <>
+            <div>
+              <input
+                type="text"
+                placeholder="Paste Github Link"
+                value={formData.github || ""}
+                onChange={(e) =>
+                  setFormData({
+                    ...formData,
+                    github: e.target.value,
+                  })
+                }
+              />
 
-          <div>
+              <input
+                type="text"
+                placeholder="Paste Linkedin Link"
+                value={formData.linkedin || ""}
+                onChange={(e) =>
+                  setFormData({
+                    ...formData,
+                    linkedin: e.target.value,
+                  })
+                }
+              />
 
-            <input type="text" placeholder="Paste Github Link" 
-            value={formData.github || ""}
-           onChange={(e)=> 
-            setFormData({
-              ...formData,
-              github : e.target.value
-            })
-           }
-          
-          />
+              <input
+                type="text"
+                placeholder="Paste Portfolio Link"
+                value={formData.portfolio || ""}
+                onChange={(e) =>
+                  setFormData({
+                    ...formData,
+                    portfolio: e.target.value,
+                  })
+                }
+              />
+            </div>
 
-          <input type="text" placeholder="Paste Linkedin Link" 
-            value={formData.linkedin || ""}
-           onChange={(e)=> 
-            setFormData({
-              ...formData,
-              linkedin : e.target.value
-            })
-           }
-          
-          />
-
-
-          <input type="text" placeholder="Paste Portfolio Link" 
-            value={formData.portfolio || ""}
-           onChange={(e)=> 
-            setFormData({
-              ...formData,
-              portfolio : e.target.value
-            })
-           }
-          
-          />
-
-          
-            
-          </div>
-
-          
             <button onClick={handleSave} disabled={saving}>
               {saving ? "Saving..." : "Save"}
             </button>
