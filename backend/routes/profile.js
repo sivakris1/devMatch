@@ -140,7 +140,7 @@ router.put('/', auth, async (req, res) => {
       update.$set = { ...update.$set, location };
 
     if (github !== undefined)
-      update.$set = { ...update.$set, github };
+      update.github = github;
 
     if (linkedin !== undefined)
       update.$set = { ...update.$set, linkedin };

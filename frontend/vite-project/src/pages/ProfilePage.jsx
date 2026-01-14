@@ -49,6 +49,7 @@ export default function ProfilePage() {
         experienceLevel: formData.experienceLevel,
         bio: formData.bio,
         location: formData.location,
+        github: formData.github
       });
 
       const fresh = await api.get("/profile");
@@ -78,6 +79,7 @@ export default function ProfilePage() {
       <p><b>Experience:</b> {user.experienceLevel}</p>
       <p><b>Location:</b> {user.location || "Not set"}</p>
       <p><b>Bio:</b> {user.bio || "Not set"}</p>
+      <p><b>Github:</b> {user.github || "Not set"}</p>
 
       {/* SKILLS */}
       {!isEditing ? (
@@ -125,6 +127,25 @@ export default function ProfilePage() {
           <button onClick={() => setIsEditing(true)}>Edit</button>
         ) : (
           <>
+
+          <div>
+
+            <input type="text" placeholder="Paste Github Link" 
+            value={formData.github || ""}
+           onChange={(e)=> 
+            setFormData({
+              ...formData,
+              github : e.target.value
+            })
+           }
+          
+          />
+
+          
+            
+          </div>
+
+          
             <button onClick={handleSave} disabled={saving}>
               {saving ? "Saving..." : "Save"}
             </button>
