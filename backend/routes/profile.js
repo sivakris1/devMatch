@@ -143,10 +143,10 @@ router.put('/', auth, async (req, res) => {
       update.github = github;
 
     if (linkedin !== undefined)
-      update.$set = { ...update.$set, linkedin };
+      update.linkedin = linkedin;
 
     if (portfolio !== undefined)
-      update.$set = { ...update.$set, portfolio };
+      update.portfolio = portfolio;
 
     const updatedUser = await User.findByIdAndUpdate(
       req.userId,

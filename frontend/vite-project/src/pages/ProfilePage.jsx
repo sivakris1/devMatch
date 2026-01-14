@@ -49,7 +49,9 @@ export default function ProfilePage() {
         experienceLevel: formData.experienceLevel,
         bio: formData.bio,
         location: formData.location,
-        github: formData.github
+        github: formData.github,
+        linkedin : formData.linkedin,
+        portfolio : formData.portfolio
       });
 
       const fresh = await api.get("/profile");
@@ -79,7 +81,51 @@ export default function ProfilePage() {
       <p><b>Experience:</b> {user.experienceLevel}</p>
       <p><b>Location:</b> {user.location || "Not set"}</p>
       <p><b>Bio:</b> {user.bio || "Not set"}</p>
-      <p><b>Github:</b> {user.github || "Not set"}</p>
+      <p>
+  <b>Github:</b>{" "}
+  {user.github ? (
+    <a
+      href={user.github}
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      {user.github}
+    </a>
+  ) : (
+    "Not set"
+  )}
+</p>
+
+      <p>
+  <b>Linkedin:</b>{" "}
+  {user.linkedin ? (
+    <a
+      href={user.linkedin}
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+     {user.linkedin}
+    </a>
+  ) : (
+    "Not set"
+  )}
+</p>
+
+      <p>
+  <b>Portfolio:</b>{" "}
+  {user.portfolio ? (
+    <a
+      href={user.portfolio}
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      {user.portfolio}
+    </a>
+  ) : (
+    "Not set"
+  )}
+</p>
+
 
       {/* SKILLS */}
       {!isEditing ? (
@@ -136,6 +182,29 @@ export default function ProfilePage() {
             setFormData({
               ...formData,
               github : e.target.value
+            })
+           }
+          
+          />
+
+          <input type="text" placeholder="Paste Linkedin Link" 
+            value={formData.linkedin || ""}
+           onChange={(e)=> 
+            setFormData({
+              ...formData,
+              linkedin : e.target.value
+            })
+           }
+          
+          />
+
+
+          <input type="text" placeholder="Paste Portfolio Link" 
+            value={formData.portfolio || ""}
+           onChange={(e)=> 
+            setFormData({
+              ...formData,
+              portfolio : e.target.value
             })
            }
           
