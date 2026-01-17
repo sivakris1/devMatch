@@ -25,9 +25,9 @@ const DevelopersPage = () => {
       };
       const res = await api.post("/developers/search", payload);
       setDevelopers(res.data.data.developers);
-      console.log(res);
+      
     } catch (err) {
-      console.error("Failed to fetch developers", err);
+      
     } finally {
       setLoading(false);
     }
@@ -41,7 +41,7 @@ const DevelopersPage = () => {
         setDevelopers(res.data.data.developers);
         setPagination(res.data.data.pagination);
       } catch (err) {
-        console.error("Failed to fetch developers", err);
+        
       } finally {
         setLoading(false);
       }
@@ -89,7 +89,7 @@ const DevelopersPage = () => {
             key={dev._id}
             style={{ border: "1px solid #ccc", margin: 10, padding: 10 }}
             onClick={() => {
-              (navigate(`/developers/${dev._id}`), console.log(dev));
+              (navigate(`/developers/${dev._id}`));
             }}
           >
             <p>
@@ -119,7 +119,7 @@ const DevelopersPage = () => {
     </button>
 
     <span style={{ margin: "0 10px" }}>
-      Page {pagination.currentPage} of {pagination.totalPages}
+      Page {pagination.currentPage} of {pagination.totalPages} 
     </span>
 
     <button

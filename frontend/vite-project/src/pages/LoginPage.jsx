@@ -27,7 +27,7 @@ const LoginPage = () => {
 
             navigate('/profile');
         } catch (err) {
-      console.error(err);
+      
       setError(
         err.response?.data?.message || 'Login failed. Check your credentials.'
       );

@@ -28,7 +28,7 @@ const RegisterPage = () => {
 
             navigate('/login');
         } catch (err) {
-      console.error(err);
+      
       setError(
         err.response?.data?.message 
       );

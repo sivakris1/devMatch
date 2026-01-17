@@ -4,7 +4,7 @@ import express from 'express';
 
 const router = express.Router()
 
-console.log('🔥 PROFILE ROUTES LOADED 🔥');
+
 
 
 
@@ -24,7 +24,7 @@ router.get('/',auth, async(req,res)=>{
     });
 
     } catch (error) {
-    console.error('Get profile error:', error);
+    
     res.status(500).json({ message: 'Server error' });
   }
 
@@ -119,7 +119,7 @@ router.put('/', auth, async (req, res) => {
       portfolio,
     } = req.body;
 
-    console.log("Incoming skills:", req.body.skills);
+    
 
 
     const update = {};
@@ -159,7 +159,7 @@ router.put('/', auth, async (req, res) => {
       data: updatedUser,
     });
   } catch (error) {
-    console.error(error);
+   
     res.status(500).json({ message: 'Server error' });
   }
 });
@@ -186,7 +186,7 @@ router.get('/:userId', async(req,res) => {
       data: user
     });
   } catch (error) {
-    console.error('Get user profile error:', error);
+    
     res.status(500).json({ message: 'Server error' });
   }
 });

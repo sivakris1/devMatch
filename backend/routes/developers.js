@@ -81,7 +81,7 @@ router.get('/recommend', auth, async (req, res) => {
       },
     });
   } catch (error) {
-    console.error('Recommend developers error:', error);
+    
     res.status(500).json({ message: 'Server error' });
   }
 });
@@ -145,7 +145,7 @@ router.post('/search', auth, async (req, res) => {
       },
     });
   } catch (error) {
-    console.error('Search developers error:', error);
+    
     res.status(500).json({ message: 'Server error' });
   }
 });
@@ -186,7 +186,7 @@ router.get('/', auth, async (req, res) => {
       },
     });
   } catch (error) {
-    console.error('Get developers error:', error);
+  
     res.status(500).json({ message: 'Server error' });
   }
 });
