@@ -5,83 +5,79 @@ import { useState } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
 
 const DevelopersPage = () => {
-
   const navigate = useNavigate();
   const [developers, setDevelopers] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  const [skills,setSkills] = useState("");
-  const [experienceLevel,setExperienceLevel] = useState("");
-  const [location,setLocation] = useState("");
+  const [page, setPage] = useState(1);
+  const [pagination, setPagination] = useState(null);
 
-  const searchDevelopers = async() => {
-      try {
+  const [skills, setSkills] = useState("");
+  const [experienceLevel, setExperienceLevel] = useState("");
+  const [location, setLocation] = useState("");
 
-        const payload = {
-          skills : skills?skills.split(",").map(s => s.trim()) :  undefined,
-          experienceLevel: experienceLevel || undefined,
-          location: location || undefined,
-        }
-        const res = await api.post('/developers/search',payload);
-        setDevelopers(res.data.data.developers);
-        console.log(res)
-
-      } catch (err) {
-        console.error("Failed to fetch developers", err);
-      } finally {
-        setLoading(false);
-      }
+  const searchDevelopers = async () => {
+    try {
+      const payload = {
+        skills: skills ? skills.split(",").map((s) => s.trim()) : undefined,
+        experienceLevel: experienceLevel || undefined,
+        location: location || undefined,
+      };
+      const res = await api.post("/developers/search", payload);
+      setDevelopers(res.data.data.developers);
+      console.log(res);
+    } catch (err) {
+      console.error("Failed to fetch developers", err);
+    } finally {
+      setLoading(false);
     }
+  };
 
   useEffect(() => {
     const fetchDevelopers = async () => {
       try {
-        const res = await api.get("/developers/recommend");
+        const res = await api.get(`/developers/recommend?page=${page}&limit=5`);
+
         setDevelopers(res.data.data.developers);
+        setPagination(res.data.data.pagination);
       } catch (err) {
         console.error("Failed to fetch developers", err);
       } finally {
         setLoading(false);
       }
-
     };
 
-
     fetchDevelopers();
-  }, []);
+  }, [page]);
 
-    if (loading) return <p>Loading developers...</p>;
+  if (loading) return <p>Loading developers...</p>;
 
   return (
-
-    
     <div>
+      <input
+        placeholder="Skills (comma separated)"
+        value={skills}
+        onChange={(e) => setSkills(e.target.value)}
+      />
+
+      <select
+        value={experienceLevel}
+        onChange={(e) => setExperienceLevel(e.target.value)}
+      >
+        <option value="">Any level</option>
+        <option value="Beginner">Beginner</option>
+        <option value="Intermediate">Intermediate</option>
+        <option value="Advanced">Advanced</option>
+        <option value="Expert">Expert</option>
+      </select>
 
       <input
-  placeholder="Skills (comma separated)"
-  value={skills}
-  onChange={(e) => setSkills(e.target.value)}
-/>
+        placeholder="Location"
+        value={location}
+        onChange={(e) => setLocation(e.target.value)}
+      />
 
-<select
-  value={experienceLevel}
-  onChange={(e) => setExperienceLevel(e.target.value)}
->
-  <option value="">Any level</option>
-  <option value="Beginner">Beginner</option>
-  <option value="Intermediate">Intermediate</option>
-  <option value="Advanced">Advanced</option>
-  <option value="Expert">Expert</option>
-</select>
-
-<input
-  placeholder="Location"
-  value={location}
-  onChange={(e) => setLocation(e.target.value)}
-/>
-
-<button onClick={()=>searchDevelopers()}>Search</button>
-
+      <button onClick={() => searchDevelopers()}>Search</button>
 
       <h2>Recommended Developers</h2>
 
@@ -89,17 +85,52 @@ const DevelopersPage = () => {
         <p>No recommendations found</p>
       ) : (
         developers.map((dev) => (
-          <div key={dev._id} style={{ border: "1px solid #ccc", margin: 10, padding: 10 }} 
-          onClick={() => {navigate(`/developers/${dev._id}`), console.log(dev)} }
+          <div
+            key={dev._id}
+            style={{ border: "1px solid #ccc", margin: 10, padding: 10 }}
+            onClick={() => {
+              (navigate(`/developers/${dev._id}`), console.log(dev));
+            }}
           >
-            
-            <p><b>Name:</b> {dev.name}</p>
-            <p><b>Experience:</b> {dev.experienceLevel}</p>
-            <p><b>Skills:</b> {dev.skills.join(", ")}</p>
-            <p><b>Matched Skills:</b> {dev.skillOverlapCount}</p>
+            <p>
+              <b>Name:</b> {dev.name}
+            </p>
+            <p>
+              <b>Experience:</b> {dev.experienceLevel}
+            </p>
+            <p>
+              <b>Skills:</b> {dev.skills.join(", ")}
+            </p>
+            <p>
+              <b>Matched Skills:</b> {dev.skillOverlapCount}
+            </p>
           </div>
         ))
       )}
+
+
+      {pagination && (
+  <div style={{ marginTop: 20 }}>
+    <button
+      disabled={!pagination.hasPrev}
+      onClick={() => setPage((p) => p - 1)}
+    >
+      Prev
+    </button>
+
+    <span style={{ margin: "0 10px" }}>
+      Page {pagination.currentPage} of {pagination.totalPages}
+    </span>
+
+    <button
+      disabled={!pagination.hasNext}
+      onClick={() => setPage((p) => p + 1)}
+    >
+      Next
+    </button>
+  </div>
+)}
+
     </div>
   );
 };
