@@ -37,7 +37,7 @@ const LoginPage = () => {
   };
    return (
     <div style={{ maxWidth: 400, margin: '40px auto' }}>
-      <h1>DevMatch Login</h1>
+      <h1>Welcome back to DevMatch</h1>
 
       <form onSubmit={handleSubmit}>
         <div style={{ marginBottom: 12 }}>

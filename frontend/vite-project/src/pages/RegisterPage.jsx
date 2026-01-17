@@ -41,7 +41,7 @@ const RegisterPage = () => {
   return (
     <div>
 
-        <h1>DevMatch SignUp</h1>
+        <h1>Create Your DevMatch profile</h1>
       
       <form onSubmit={handleSubmit}>
 
