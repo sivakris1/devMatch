@@ -67,6 +67,9 @@ router.get('/recommend', auth, async (req, res) => {
       skip + limitNum
     );
 
+    console.log("TOTAL MATCHED:", totalCount);
+
+
     res.json({
       success: true,
       data: {

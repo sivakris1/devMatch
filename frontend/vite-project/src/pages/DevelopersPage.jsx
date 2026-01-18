@@ -12,43 +12,65 @@ const DevelopersPage = () => {
   const [page, setPage] = useState(1);
   const [pagination, setPagination] = useState(null);
 
+  const [isSearching, setIsSearching] = useState(false);
+
+
   const [skills, setSkills] = useState("");
   const [experienceLevel, setExperienceLevel] = useState("");
   const [location, setLocation] = useState("");
 
-  const searchDevelopers = async () => {
-    try {
-      const payload = {
-        skills: skills ? skills.split(",").map((s) => s.trim()) : undefined,
-        experienceLevel: experienceLevel || undefined,
-        location: location || undefined,
-      };
-      const res = await api.post("/developers/search", payload);
-      setDevelopers(res.data.data.developers);
-      
-    } catch (err) {
-      
-    } finally {
-      setLoading(false);
-    }
+ const searchDevelopers = async () => {
+  setPage(1);
+  setIsSearching(true);
+  setLoading(true);
+
+  const payload = {
+    skills: skills ? skills.split(",").map(s => s.trim()) : undefined,
+    experienceLevel: experienceLevel || undefined,
+    location: location || undefined,
   };
 
+  const res = await api.post(
+    `/developers/search?page=1&limit=5`,
+    payload
+  );
+
+  setDevelopers(res.data.data.developers);
+  setPagination(res.data.data.pagination);
+  setLoading(false);
+};
+
+
   useEffect(() => {
-    const fetchDevelopers = async () => {
-      try {
-        const res = await api.get(`/developers/recommend?page=${page}&limit=5`);
+  const fetchDevelopers = async () => {
+    setLoading(true);
 
-        setDevelopers(res.data.data.developers);
-        setPagination(res.data.data.pagination);
-      } catch (err) {
-        
-      } finally {
-        setLoading(false);
-      }
-    };
+    const url = isSearching
+      ? `/developers/search?page=${page}&limit=5`
+      : `/developers/recommend?page=${page}&limit=5`;
 
-    fetchDevelopers();
-  }, [page]);
+    const method = isSearching ? api.post : api.get;
+    const payload = isSearching
+      ? {
+          skills: skills ? skills.split(",").map(s => s.trim()) : undefined,
+          experienceLevel: experienceLevel || undefined,
+          location: location || undefined,
+        }
+      : undefined;
+
+    const res = isSearching
+      ? await method(url, payload)
+      : await method(url);
+
+    setDevelopers(res.data.data.developers);
+    setPagination(res.data.data.pagination);
+    setLoading(false);
+  };
+
+  fetchDevelopers();
+}, [page, isSearching]);
+
+
 
   if (loading) return <p>Loading developers...</p>;
 
