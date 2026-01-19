@@ -90,7 +90,9 @@ const DevelopersPage = () => {
         onChange={(e) => setLocation(e.target.value)}
       />
 
-      <button onClick={() => searchDevelopers()}>Search</button>
+      <button disabled={loading} onClick={searchDevelopers}>
+        {loading ? "Searching..." : "Search"}
+      </button>
 
       <h2>Recommended Developers</h2>
 
