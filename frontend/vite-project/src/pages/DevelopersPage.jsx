@@ -2,7 +2,7 @@ import React from "react";
 import { useEffect } from "react";
 import api from "../api/client";
 import { useState } from "react";
-import { Navigate, useNavigate } from "react-router-dom";
+import {  useNavigate } from "react-router-dom";
 
 const DevelopersPage = () => {
   const navigate = useNavigate();
