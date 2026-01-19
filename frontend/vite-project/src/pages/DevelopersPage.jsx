@@ -14,63 +14,54 @@ const DevelopersPage = () => {
 
   const [isSearching, setIsSearching] = useState(false);
 
-
   const [skills, setSkills] = useState("");
   const [experienceLevel, setExperienceLevel] = useState("");
   const [location, setLocation] = useState("");
 
- const searchDevelopers = async () => {
-  setPage(1);
-  setIsSearching(true);
-  setLoading(true);
-
-  const payload = {
-    skills: skills ? skills.split(",").map(s => s.trim()) : undefined,
-    experienceLevel: experienceLevel || undefined,
-    location: location || undefined,
-  };
-
-  const res = await api.post(
-    `/developers/search?page=1&limit=5`,
-    payload
-  );
-
-  setDevelopers(res.data.data.developers);
-  setPagination(res.data.data.pagination);
-  setLoading(false);
-};
-
-
-  useEffect(() => {
-  const fetchDevelopers = async () => {
+  const searchDevelopers = async () => {
+    setPage(1);
+    setIsSearching(true);
     setLoading(true);
 
-    const url = isSearching
-      ? `/developers/search?page=${page}&limit=5`
-      : `/developers/recommend?page=${page}&limit=5`;
+    const payload = {
+      skills: skills ? skills.split(",").map((s) => s.trim()) : undefined,
+      experienceLevel: experienceLevel || undefined,
+      location: location || undefined,
+    };
 
-    const method = isSearching ? api.post : api.get;
-    const payload = isSearching
-      ? {
-          skills: skills ? skills.split(",").map(s => s.trim()) : undefined,
-          experienceLevel: experienceLevel || undefined,
-          location: location || undefined,
-        }
-      : undefined;
-
-    const res = isSearching
-      ? await method(url, payload)
-      : await method(url);
+    const res = await api.post(`/developers/search?page=1&limit=5`, payload);
 
     setDevelopers(res.data.data.developers);
     setPagination(res.data.data.pagination);
     setLoading(false);
   };
 
-  fetchDevelopers();
-}, [page, isSearching]);
+  useEffect(() => {
+    const fetchDevelopers = async () => {
+      setLoading(true);
 
+      const url = isSearching
+        ? `/developers/search?page=${page}&limit=5`
+        : `/developers/recommend?page=${page}&limit=5`;
 
+      const method = isSearching ? api.post : api.get;
+      const payload = isSearching
+        ? {
+            skills: skills ? skills.split(",").map((s) => s.trim()) : undefined,
+            experienceLevel: experienceLevel || undefined,
+            location: location || undefined,
+          }
+        : undefined;
+
+      const res = isSearching ? await method(url, payload) : await method(url);
+
+      setDevelopers(res.data.data.developers);
+      setPagination(res.data.data.pagination);
+      setLoading(false);
+    };
+
+    fetchDevelopers();
+  }, [page, isSearching]);
 
   if (loading) return <p>Loading developers...</p>;
 
@@ -109,9 +100,14 @@ const DevelopersPage = () => {
         developers.map((dev) => (
           <div
             key={dev._id}
-            style={{ border: "1px solid #ccc", margin: 10, padding: 10 }}
+            // style={{ border: "1px solid #ccc", margin: 10, padding: 10 }}
+            style={{
+              cursor: "pointer",
+              border: "1px solid #ccc",
+              padding: 10,
+            }}
             onClick={() => {
-              (navigate(`/developers/${dev._id}`));
+              navigate(`/developers/${dev._id}`);
             }}
           >
             <p>
@@ -130,29 +126,27 @@ const DevelopersPage = () => {
         ))
       )}
 
-
       {pagination && (
-  <div style={{ marginTop: 20 }}>
-    <button
-      disabled={!pagination.hasPrev}
-      onClick={() => setPage((p) => p - 1)}
-    >
-      Prev
-    </button>
+        <div style={{ marginTop: 20 }}>
+          <button
+            disabled={!pagination.hasPrev}
+            onClick={() => setPage((p) => p - 1)}
+          >
+            Prev
+          </button>
 
-    <span style={{ margin: "0 10px" }}>
-      Page {pagination.currentPage} of {pagination.totalPages} 
-    </span>
+          <span style={{ margin: "0 10px" }}>
+            Page {pagination.currentPage} of {pagination.totalPages}
+          </span>
 
-    <button
-      disabled={!pagination.hasNext}
-      onClick={() => setPage((p) => p + 1)}
-    >
-      Next
-    </button>
-  </div>
-)}
-
+          <button
+            disabled={!pagination.hasNext}
+            onClick={() => setPage((p) => p + 1)}
+          >
+            Next
+          </button>
+        </div>
+      )}
     </div>
   );
 };
