@@ -1,191 +1,216 @@
-DevMatch MVP - Developer Matching Platform Backend
-A RESTful API backend for connecting developers based on skills, experience, and location. Built with Node.js, Express, and MongoDB.
+# DevMatch MVP – Developer Matching Platform
 
-🚀 Features
-User Authentication - JWT-based registration and login system
-Profile Management - Complete user profile CRUD operations
-Developer Discovery - Three powerful ways to find developers:
-List All Developers - Paginated listing of all registered developers
-Advanced Search - Filter by skills, experience level, and location
-Smart Recommendations - AI-powered skill overlap matching algorithm
-🛠️ Tech Stack
-Runtime: Node.js
-Framework: Express.js
-Database: MongoDB with Mongoose ODM
-Authentication: JWT (JSON Web Tokens)
-Password Security: bcryptjs
-Environment: dotenv
-Development: nodemon
-📁 Project Structure
-devmatch-mvp/
+DevMatch is a **full-stack MVP** that helps developers discover and connect with other developers based on **skills, experience, and location**.
+
+This project focuses on **core functionality**, not UI polish.
+
+---
+
+## 🚀 Features
+
+### 🔐 Authentication
+- User registration & login using JWT
+- Protected routes for authenticated users
+
+### 👤 Profile Management
+- View & edit developer profile
+- Manage:
+  - Skills
+  - Experience level
+  - Location
+  - Bio
+  - GitHub, LinkedIn, Portfolio (optional)
+
+### 🧑‍💻 Developer Discovery
+- **Recommended Developers**
+  - Skill-overlap based matching
+  - Sorted by relevance
+- **Search Developers**
+  - Filter by skills, experience, and location
+- **Public Developer Profiles**
+  - View other developers’ profiles
+
+> ⚠️ Pagination logic exists in backend but is intentionally disabled in frontend for MVP stability.
+
+---
+
+## 🛠️ Tech Stack
+
+### Backend
+- Node.js
+- Express.js
+- MongoDB + Mongoose
+- JWT Authentication
+- bcrypt
+
+### Frontend
+- React
+- React Router
+- Axios
+- Inline styling (design is not the focus)
+
+---
+
+## 📁 Project Structure
+
+devmatch/
 ├── backend/
-│   ├── models/
-│   │   └── User.js          # User schema with skills, experience, location
-│   ├── routes/
-│   │   ├── auth.js          # Authentication endpoints
-│   │   ├── profile.js       # Profile management endpoints
-│   │   └── developers.js    # Developer discovery endpoints
-│   ├── middleware/
-│   │   └── auth.js          # JWT verification middleware
-│   ├── server.js            # Main server file
-│   ├── test-api.js          # API testing script
-│   ├── package.json         # Dependencies and scripts
-│   └── .env                 # Environment variables
-└── README.md                # This file
-⚙️ Installation & Setup
-Prerequisites
-Node.js (v14 or higher)
-MongoDB (local or MongoDB Atlas)
-npm or yarn
-Steps
-Clone the repository
+│ ├── models/
+│ │ └── User.js
+│ ├── routes/
+│ │ ├── auth.js
+│ │ ├── profile.js
+│ │ └── developers.js
+│ ├── middleware/
+│ │ └── auth.js
+│ ├── server.js
+│ └── .env
+│
+├── frontend/
+│ ├── pages/
+│ │ ├── LoginPage.jsx
+│ │ ├── RegisterPage.jsx
+│ │ ├── ProfilePage.jsx
+│ │ ├── DevelopersPage.jsx
+│ │ └── DevelopersProfile.jsx
+│ ├── components/
+│ │ └── ProtectedRoute.jsx
+│ └── App.jsx
+│
+└── README.md
 
-git clone <repository-url>
-cd devmatch-mvp/backend
-Install dependencies
+yaml
+Copy code
 
+---
+
+## ⚙️ Installation & Setup
+
+### Prerequisites
+- Node.js (v16+)
+- MongoDB (local or Atlas)
+
+---
+
+### Backend Setup
+
+```bash
+cd backend
 npm install
-Set up environment variables Create a .env file in the backend directory:
+Create .env file:
 
+env
+Copy code
 PORT=5000
 MONGODB_URI=mongodb://localhost:27017/devmatch
-JWT_SECRET=your_super_secret_jwt_key_here
-Start MongoDB
+JWT_SECRET=your_jwt_secret
+Run backend:
 
-Local: mongod
-Or use MongoDB Atlas cloud database
-Run the server
-
-# Development mode (with nodemon)
+bash
+Copy code
 npm run dev
-
-# Production mode
-npm start
-Test the API
-
-node test-api.js
-📚 API Endpoints
+Frontend Setup
+bash
+Copy code
+cd frontend
+npm install
+npm run dev
+📚 API Overview
 Authentication
-Register User
+Register
+
+arduino
+Copy code
 POST /api/auth/register
-Content-Type: application/json
+Login
 
-{
-  "name": "John Doe",
-  "email": "john@example.com",
-  "password": "securepassword123"
-}
-Login User
+bash
+Copy code
 POST /api/auth/login
-Content-Type: application/json
+Profile
+Get Profile
 
-{
-  "email": "john@example.com",
-  "password": "securepassword123"
-}
-Profile Management
-Get User Profile
+sql
+Copy code
 GET /api/profile
-Authorization: Bearer <jwt_token>
-Update User Profile
+Authorization: Bearer <token>
+Update Profile
+
+bash
+Copy code
 PUT /api/profile
-Authorization: Bearer <jwt_token>
-Content-Type: application/json
+Authorization: Bearer <token>
+Example payload:
 
+json
+Copy code
 {
-  "bio": "Full-stack developer with 5 years experience",
-  "skills": ["JavaScript", "React", "Node.js", "MongoDB"],
-  "experienceLevel": "intermediate",
-  "location": "San Francisco, CA",
-  "githubUrl": "https://github.com/johndoe",
-  "linkedinUrl": "https://linkedin.com/in/johndoe"
+  "skills": ["React", "Node.js", "MongoDB"],
+  "experienceLevel": "Expert",
+  "bio": "Full-stack developer",
+  "location": "India",
+  "github": "https://github.com/username",
+  "linkedin": "https://linkedin.com/in/username",
+  "portfolio": "https://portfolio.com"
 }
-Developer Discovery
-List All Developers
-GET /api/developers?page=1&limit=10
-Authorization: Bearer <jwt_token>
+Developers
+Recommended Developers
+
+bash
+Copy code
+GET /api/developers/recommend
 Search Developers
-GET /api/developers/search?skills=React&experienceLevel=intermediate&location=San Francisco
-Authorization: Bearer <jwt_token>
-Get Recommended Developers
-GET /api/developers/recommend?page=1&limit=5
-Authorization: Bearer <jwt_token>
-🔧 Environment Variables
-Variable	Description	Example
-PORT	Server port number	5000
-MONGODB_URI	MongoDB connection string	mongodb://localhost:27017/devmatch
-JWT_SECRET	Secret key for JWT tokens	your_super_secret_key
-📖 Usage Examples
-Using cURL
-Register a new user:
 
-curl -X POST http://localhost:5000/api/auth/register \
-  -H "Content-Type: application/json" \
-  -d '{"name":"Jane Smith","email":"jane@example.com","password":"password123"}'
-Get recommendations:
+bash
+Copy code
+POST /api/developers/search
+Payload:
 
-curl -X GET "http://localhost:5000/api/developers/recommend?page=1&limit=5" \
-  -H "Authorization: Bearer YOUR_JWT_TOKEN"
-Response Format
-All API responses follow this consistent format:
-
+json
+Copy code
 {
-  "success": true,
-  "data": {
-    "developers": [...],
-    "pagination": {
-      "currentPage": 1,
-      "totalPages": 3,
-      "totalCount": 25,
-      "hasNext": true,
-      "hasPrev": false
-    }
-  }
+  "skills": ["React"],
+  "experienceLevel": "Intermediate",
+  "location": "India"
 }
-🧠 Recommendation Algorithm
-The smart recommendation system works by:
+Public Developer Profile
 
-Skill Extraction - Gets current user’s skills from their profile
-MongoDB Query - Uses $in operator to find developers with overlapping skills
-Overlap Calculation - Counts matching skills between users (case-insensitive)
-Relevance Sorting - Sorts developers by skill overlap count (highest first)
-Pagination - Applies pagination to the sorted results
-// Core algorithm snippet
-const developers = await User.find({
-  _id: { $ne: req.user._id },
-  skills: { $in: currentUserSkills }
-});
+bash
+Copy code
+GET /api/profile/:userId
+🧠 Recommendation Logic
+Fetch current user skills
 
-const developersWithScore = developers.map(dev => ({
-  ...dev,
-  skillOverlapCount: dev.skills.filter(skill => 
-    currentUserSkills.some(userSkill => 
-      userSkill.toLowerCase() === skill.toLowerCase()
+Find developers with overlapping skills
+
+Count overlaps
+
+Sort by highest match
+
+js
+Copy code
+skillOverlapCount =
+  dev.skills.filter(skill =>
+    currentUserSkills.some(
+      mySkill => mySkill.toLowerCase() === skill.toLowerCase()
     )
-  ).length
-}));
-
+  ).length;
 🔮 Future Enhancements
-Real-time Messaging - WebSocket integration for developer communication
-Project Collaboration - Create and manage collaborative projects
-Skill Verification - GitHub integration for skill validation
-Advanced Matching - Machine learning for better recommendations
-Geolocation - Distance-based developer discovery
-Rating System - Peer reviews and ratings
-Email Notifications - Match alerts and updates
-File Upload - Profile pictures and resume uploads
-API Rate Limiting - Prevent abuse and ensure fair usage
-Comprehensive Testing - Unit and integration test suites
-🤝 Contributing
-Fork the repository
-Create a feature branch (git checkout -b feature/amazing-feature)
-Commit your changes (git commit -m 'Add some amazing feature')
-Push to the branch (git push origin feature/amazing-feature)
-Open a Pull Request
-📝 License
-This project is licensed under the MIT License - see the LICENSE file for details.
+Pagination (search & recommendations)
 
-👨‍💻 Developer
-Built with ❤️ by [Siva Krishna] 
+Messaging system
 
-⭐ Star this repository if you found it helpful!
+Profile image upload
+
+GitHub API integration
+
+Favorites / bookmarks
+
+Improved UI/UX
+
+Automated tests
+
+🧑‍💻 Developer
+Built with persistence by Siva Krishna
+
+⭐ Star the repository if you found it useful.
