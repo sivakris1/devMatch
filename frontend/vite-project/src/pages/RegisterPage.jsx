@@ -1,6 +1,10 @@
 import React, { useState } from 'react'
 import api from '../api/client'
+
 import { useNavigate } from 'react-router-dom'
+import PageWrapper from './PageWrapper'
+
+
 
 const RegisterPage = () => {
 
@@ -38,7 +42,11 @@ const RegisterPage = () => {
   };
 
 
+
+
   return (
+  <PageWrapper title="My Profile">
+    
     <div>
 
         <h1>Create Your DevMatch profile</h1>
@@ -88,7 +96,8 @@ const RegisterPage = () => {
         </button>
       </form>
     </div>
-  )
+  </PageWrapper>
+);
 }
 
 export default RegisterPage

@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import api from "../api/client";
 import { useAuth } from "../context/AuthContext";
+import PageWrapper from "./PageWrapper";
+
 
 export default function ProfilePage() {
   const { logout } = useAuth();
@@ -72,7 +74,10 @@ export default function ProfilePage() {
 
   const user = isEditing ? formData : profile;
 
-  return (
+  
+return (
+  <PageWrapper title="My Profile">
+    
     <div style={{ maxWidth: 600, margin: "40px auto" }}>
       <h2>My Profile</h2>
 
@@ -230,5 +235,6 @@ export default function ProfilePage() {
         Logout
       </button>
     </div>
-  );
+  </PageWrapper>
+);
 }

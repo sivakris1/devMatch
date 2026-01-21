@@ -2,6 +2,8 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../api/client';
 import { useAuth } from '../context/AuthContext';
+import DarkLayout from '../components/DarkLayout';
+
 
 const LoginPage = () => {
     const {login} = useAuth();
@@ -35,7 +37,12 @@ const LoginPage = () => {
       setLoading(false);
     }
   };
-   return (
+
+ 
+
+return (
+  <DarkLayout title="Find Developers">
+    
     <div style={{ maxWidth: 400, margin: '40px auto' }}>
       <h1>Welcome back to DevMatch</h1>
 
@@ -71,7 +78,11 @@ const LoginPage = () => {
         </button>
       </form>
     </div>
-  );
+  </DarkLayout>
+);
+   
 }
+
+
 
 export default LoginPage;
