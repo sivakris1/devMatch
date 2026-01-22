@@ -14,6 +14,9 @@ export default function ProfilePage() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
 
+  const [error, setError] = useState("");
+
+
   // FETCH PROFILE ONCE
   useEffect(() => {
     const load = async () => {
@@ -26,8 +29,10 @@ export default function ProfilePage() {
         setProfile(user);
         setFormData(user);
       } catch {
-        logout();
-      } finally {
+  setError("Failed to load profile");
+  logout();
+}
+finally {
         setLoading(false);
       }
     };
@@ -71,6 +76,9 @@ export default function ProfilePage() {
   };
 
   if (loading) return <p>Loading...</p>;
+
+  {error && <p style={{ color: "red" }}>{error}</p>}
+
 
   const user = isEditing ? formData : profile;
 

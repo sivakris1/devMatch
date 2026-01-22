@@ -14,6 +14,7 @@ export default function DevelopersProfile() {
       try {
         const res = await api.get(`/profile/${id}`);
         setDeveloper(res.data.data);
+        setError("");
       } catch (err) {
         setError("Developer not found");
       } finally {

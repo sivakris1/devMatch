@@ -12,14 +12,19 @@ const DevelopersPage = () => {
   const [experienceLevel, setExperienceLevel] = useState("");
   const [location, setLocation] = useState("");
 
+  const [error, setError] = useState("");
+
   // 🔹 Fetch recommended developers
   useEffect(() => {
     const fetchDevelopers = async () => {
       try {
         const res = await api.get("/developers/recommend");
         setDevelopers(res.data.data.developers);
+        setError("");
       } catch (err) {
         console.error("Failed to fetch developers", err);
+        setError("Failed to load developers");
+        setDevelopers([]);
       } finally {
         setLoading(false);
       }
@@ -34,9 +39,7 @@ const DevelopersPage = () => {
 
     try {
       const payload = {
-        skills: skills
-          ? skills.split(",").map((s) => s.trim())
-          : undefined,
+        skills: skills ? skills.split(",").map((s) => s.trim()) : undefined,
         experienceLevel: experienceLevel || undefined,
         location: location || undefined,
       };
@@ -82,6 +85,12 @@ const DevelopersPage = () => {
 
       <button onClick={searchDevelopers}>Search</button>
 
+      {!loading && developers.length === 0 && !error && (
+        <p>No developers found. Try changing filters.</p>
+      )}
+
+      {error && <p style={{ color: "red" }}>{error}</p>}
+
       {/* Results */}
       {developers.length === 0 ? (
         <p>No developers found</p>
@@ -97,11 +106,19 @@ const DevelopersPage = () => {
             }}
             onClick={() => navigate(`/developers/${dev._id}`)}
           >
-            <p><b>Name:</b> {dev.name}</p>
-            <p><b>Experience:</b> {dev.experienceLevel}</p>
-            <p><b>Skills:</b> {dev.skills.join(", ")}</p>
+            <p>
+              <b>Name:</b> {dev.name}
+            </p>
+            <p>
+              <b>Experience:</b> {dev.experienceLevel}
+            </p>
+            <p>
+              <b>Skills:</b> {dev.skills.join(", ")}
+            </p>
             {dev.skillOverlapCount !== undefined && (
-              <p><b>Matched Skills:</b> {dev.skillOverlapCount}</p>
+              <p>
+                <b>Matched Skills:</b> {dev.skillOverlapCount}
+              </p>
             )}
           </div>
         ))
