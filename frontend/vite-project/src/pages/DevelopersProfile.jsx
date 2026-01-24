@@ -1,16 +1,21 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import api from "../api/client";
+import { useUi } from "../api/UiContext";
+
+
 
 export default function DevelopersProfile() {
   const { id } = useParams();
+  const {setLoading} = useUi();
 
   const [developer, setDeveloper] = useState(null);
-  const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
   useEffect(() => {
+    
     const fetchDeveloper = async () => {
+      setLoading(true);
       try {
         const res = await api.get(`/profile/${id}`);
         setDeveloper(res.data.data);
@@ -25,7 +30,11 @@ export default function DevelopersProfile() {
     fetchDeveloper();
   }, [id]);
 
-  if (loading) return <p style={{ textAlign: "center" }}>Loading profile...</p>;
+  if(!developer){
+    return null;
+  }
+
+  // if (loading) return <p style={{ textAlign: "center" }}>Loading profile...</p>;
   if (error) return <p style={{ textAlign: "center", color: "red" }}>{error}</p>;
 
   return (

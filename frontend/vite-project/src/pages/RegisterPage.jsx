@@ -4,17 +4,20 @@ import api from '../api/client'
 import { useNavigate } from 'react-router-dom'
 import PageWrapper from './PageWrapper'
 
+import { useUi } from '../api/UiContext'
+
 
 
 const RegisterPage = () => {
 
     const navigate = useNavigate()
 
+    const {loading,setLoading} = useUi();
+
     const [name,setName] = useState("")
     const [email,setEmail] = useState("")
     const [password,setPassword] = useState("")
     
-    const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
 
     const handleSubmit = async(e) =>{

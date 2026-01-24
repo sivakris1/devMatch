@@ -1,12 +1,15 @@
 import { useEffect, useState } from "react";
 import api from "../api/client";
 import { useNavigate } from "react-router-dom";
+import { useUi } from "../api/UiContext";
+
+
 
 const DevelopersPage = () => {
   const navigate = useNavigate();
+  const {loading,setLoading} = useUi();
 
   const [developers, setDevelopers] = useState([]);
-  const [loading, setLoading] = useState(true);
 
   const [skills, setSkills] = useState("");
   const [experienceLevel, setExperienceLevel] = useState("");
@@ -17,6 +20,7 @@ const DevelopersPage = () => {
   // 🔹 Fetch recommended developers
   useEffect(() => {
     const fetchDevelopers = async () => {
+      setLoading(true);
       try {
         const res = await api.get("/developers/recommend");
         setDevelopers(res.data.data.developers);
@@ -53,7 +57,7 @@ const DevelopersPage = () => {
     }
   };
 
-  if (loading) return <p>Loading developers...</p>;
+  // if (loading) return <p>Loading developers...</p>;
 
   return (
     <div>
@@ -85,9 +89,9 @@ const DevelopersPage = () => {
 
       <button onClick={searchDevelopers}>Search</button>
 
-      {!loading && developers.length === 0 && !error && (
+      {/* {!loading && developers.length === 0 && !error && (
         <p>No developers found. Try changing filters.</p>
-      )}
+      )} */}
 
       {error && <p style={{ color: "red" }}>{error}</p>}
 

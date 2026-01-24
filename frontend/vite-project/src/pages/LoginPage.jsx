@@ -4,14 +4,17 @@ import api from '../api/client';
 import { useAuth } from '../context/AuthContext';
 import DarkLayout from '../components/DarkLayout';
 
+import { useUi } from '../api/UiContext';
+
 
 const LoginPage = () => {
+
+    const {loading,setLoading} = useUi();
     const {login} = useAuth();
     const navigate = useNavigate();
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
     
     const handleSubmit = async(e) =>{
