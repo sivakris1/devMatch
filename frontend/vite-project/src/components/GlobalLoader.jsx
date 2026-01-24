@@ -1,5 +1,6 @@
-// src/components/GlobalLoader.jsx
-import { useUi } from "../context/UiContext";
+import { useUi } from "../api/UiContext";
+
+
 
 export default function GlobalLoader() {
   const { loading } = useUi();

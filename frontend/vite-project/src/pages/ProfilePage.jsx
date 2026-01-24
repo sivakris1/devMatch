@@ -3,15 +3,18 @@ import api from "../api/client";
 import { useAuth } from "../context/AuthContext";
 import PageWrapper from "./PageWrapper";
 
+import { useUi } from "../api/UiContext";
+
 
 export default function ProfilePage() {
   const { logout } = useAuth();
+  const {setLoading} = useUi()
 
   const [profile, setProfile] = useState(null);
   const [formData, setFormData] = useState(null);
   const [newSkill, setNewSkill] = useState("");
   const [isEditing, setIsEditing] = useState(false);
-  const [loading, setLoading] = useState(true);
+
   const [saving, setSaving] = useState(false);
 
   const [error, setError] = useState("");
@@ -20,6 +23,7 @@ export default function ProfilePage() {
   // FETCH PROFILE ONCE
   useEffect(() => {
     const load = async () => {
+      setLoading(true);
       try {
         const res = await api.get("/profile");
         const user = {
@@ -75,7 +79,8 @@ finally {
     }
   };
 
-  if (loading) return <p>Loading...</p>;
+
+  
 
   {error && <p style={{ color: "red" }}>{error}</p>}
 
