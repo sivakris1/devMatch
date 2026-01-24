@@ -80,6 +80,10 @@ finally {
   };
 
 
+  if (!profile || !formData) {
+  return null; // or <div /> — GlobalLoader already handles UX
+}
+
   
 
   {error && <p style={{ color: "red" }}>{error}</p>}
