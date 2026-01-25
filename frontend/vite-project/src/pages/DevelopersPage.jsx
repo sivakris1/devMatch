@@ -88,7 +88,7 @@ const DevelopersPage = () => {
 
       <button onClick={searchDevelopers}>Search</button>
 
-      {/* {!loading && developers.length === 0 && !error && (
+      {/* {!loading && developers.length === 0 &&  (
         <p>No developers found. Try changing filters.</p>
       )} */}
 
@@ -96,7 +96,7 @@ const DevelopersPage = () => {
 
       {/* Results */}
       {developers.length === 0 ? (
-        <p>No developers found</p>
+        <p>No developers found. Try updating your profile skills.</p>
       ) : (
         developers.map((dev) => (
           <div

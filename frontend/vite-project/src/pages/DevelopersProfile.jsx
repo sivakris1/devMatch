@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Navigate, useNavigate, useParams } from "react-router-dom";
 import api from "../api/client";
 import { useUi } from "../api/UiContext";
 
@@ -8,6 +8,8 @@ import { useUi } from "../api/UiContext";
 export default function DevelopersProfile() {
   const { id } = useParams();
   const {setLoading,setError} = useUi();
+
+  const navigate = useNavigate();
 
   const [developer, setDeveloper] = useState(null);
 
@@ -21,6 +23,7 @@ export default function DevelopersProfile() {
         setError("");
       } catch (err) {
         setError("Developer not found");
+        navigate('/developers')
       } finally {
         setLoading(false);
       }
