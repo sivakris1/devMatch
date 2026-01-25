@@ -6,6 +6,8 @@ import DarkLayout from '../components/DarkLayout';
 
 import { useUi } from '../api/UiContext';
 
+import { toast } from "react-toastify";
+
 
 const LoginPage = () => {
 
@@ -28,6 +30,8 @@ const LoginPage = () => {
             const {token,user} = res.data;
 
             login({token,user});
+
+            toast.success("Login Successful")
 
             navigate('/profile');
         } catch (err) {

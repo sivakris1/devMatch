@@ -1,4 +1,5 @@
 import { createContext, useContext, useState, useEffect } from "react";
+import { toast } from "react-toastify";
 
 const AuthContext = createContext(null);
 export const useAuth = () => useContext(AuthContext);
@@ -26,6 +27,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   const logout = () => {
+    toast.success("Logout Successful");
     setToken(null);
     setUser(null);
   };

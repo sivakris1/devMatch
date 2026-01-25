@@ -4,6 +4,7 @@ import { useAuth } from "../context/AuthContext";
 import PageWrapper from "./PageWrapper";
 
 import { useUi } from "../api/UiContext";
+import { toast } from "react-toastify";
 
 
 export default function ProfilePage() {
@@ -73,6 +74,7 @@ finally {
       setProfile(user);
       setFormData(user);
       setIsEditing(false);
+      toast.success("changes saved");
     } finally {
       setSaving(false);
     }

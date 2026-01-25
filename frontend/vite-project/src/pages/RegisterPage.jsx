@@ -5,6 +5,8 @@ import { useNavigate } from 'react-router-dom'
 import PageWrapper from './PageWrapper'
 
 import { useUi } from '../api/UiContext'
+import { toast } from "react-toastify";
+
 
 
 
@@ -31,6 +33,8 @@ const RegisterPage = () => {
             // const {token,user} = res.data;
 
             // login({token,user});
+
+            toast.success("Registered Successful")
 
             navigate('/login');
         } catch (err) {
