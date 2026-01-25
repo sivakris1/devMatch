@@ -7,10 +7,9 @@ import { useUi } from "../api/UiContext";
 
 export default function DevelopersProfile() {
   const { id } = useParams();
-  const {setLoading} = useUi();
+  const {setLoading,setError} = useUi();
 
   const [developer, setDeveloper] = useState(null);
-  const [error, setError] = useState("");
 
   useEffect(() => {
     
@@ -35,7 +34,7 @@ export default function DevelopersProfile() {
   }
 
   // if (loading) return <p style={{ textAlign: "center" }}>Loading profile...</p>;
-  if (error) return <p style={{ textAlign: "center", color: "red" }}>{error}</p>;
+  // if (error) return <p style={{ textAlign: "center", color: "red" }}>{error}</p>;
 
   return (
     <div style={{ maxWidth: 700, margin: "40px auto" }}>

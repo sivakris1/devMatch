@@ -8,7 +8,7 @@ import { useUi } from "../api/UiContext";
 
 export default function ProfilePage() {
   const { logout } = useAuth();
-  const {setLoading} = useUi()
+  const {setLoading,setError} = useUi()
 
   const [profile, setProfile] = useState(null);
   const [formData, setFormData] = useState(null);
@@ -17,7 +17,6 @@ export default function ProfilePage() {
 
   const [saving, setSaving] = useState(false);
 
-  const [error, setError] = useState("");
 
 
   // FETCH PROFILE ONCE
@@ -86,7 +85,7 @@ finally {
 
   
 
-  {error && <p style={{ color: "red" }}>{error}</p>}
+  // {error && <p style={{ color: "red" }}>{error}</p>}
 
 
   const user = isEditing ? formData : profile;

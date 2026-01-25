@@ -9,13 +9,12 @@ import { useUi } from '../api/UiContext';
 
 const LoginPage = () => {
 
-    const {loading,setLoading} = useUi();
+    const {loading,setLoading,setError} = useUi();
     const {login} = useAuth();
     const navigate = useNavigate();
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [error, setError] = useState('');
     
     const handleSubmit = async(e) =>{
         e.preventDefault();
@@ -72,9 +71,9 @@ return (
           />
         </div>
 
-        {error && (
+        {/* {error && (
           <p style={{ color: 'red', marginBottom: 12 }}>{error}</p>
-        )}
+        )} */}
 
         <button type="submit" disabled={loading}>
           {loading ? 'Logging in...' : 'Login'}

@@ -9,17 +9,19 @@ import { AuthProvider } from './context/AuthContext.jsx';
 import './index.css'
 import { UiProvider } from './api/UiContext.jsx';
 import GlobalLoader from './components/GlobalLoader.jsx';
+import GlobalError from './components/GlobalError.jsx';
 
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
+    <UiProvider>
     <AuthProvider>
       <BrowserRouter>
-      <UiProvider>
         <GlobalLoader/>
+        <GlobalError/>
         <App />
-      </UiProvider>
       </BrowserRouter>
     </AuthProvider>
+    </UiProvider>
   </React.StrictMode>
 );

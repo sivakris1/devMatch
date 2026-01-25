@@ -7,7 +7,7 @@ import { useUi } from "../api/UiContext";
 
 const DevelopersPage = () => {
   const navigate = useNavigate();
-  const {loading,setLoading} = useUi();
+  const {loading,setLoading,setError} = useUi();
 
   const [developers, setDevelopers] = useState([]);
 
@@ -15,7 +15,6 @@ const DevelopersPage = () => {
   const [experienceLevel, setExperienceLevel] = useState("");
   const [location, setLocation] = useState("");
 
-  const [error, setError] = useState("");
 
   // 🔹 Fetch recommended developers
   useEffect(() => {
@@ -93,7 +92,7 @@ const DevelopersPage = () => {
         <p>No developers found. Try changing filters.</p>
       )} */}
 
-      {error && <p style={{ color: "red" }}>{error}</p>}
+      {/* {error && <p style={{ color: "red" }}>{error}</p>} */}
 
       {/* Results */}
       {developers.length === 0 ? (

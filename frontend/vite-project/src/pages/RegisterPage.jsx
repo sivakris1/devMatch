@@ -12,13 +12,12 @@ const RegisterPage = () => {
 
     const navigate = useNavigate()
 
-    const {loading,setLoading} = useUi();
+    const {loading,setLoading,setError} = useUi();
 
     const [name,setName] = useState("")
     const [email,setEmail] = useState("")
     const [password,setPassword] = useState("")
     
-    const [error, setError] = useState('');
 
     const handleSubmit = async(e) =>{
         e.preventDefault();
@@ -89,9 +88,9 @@ const RegisterPage = () => {
           />
         </div>
 
-        {error && (
+        {/* {error && (
           <p style={{ color: 'red', marginBottom: 12 }}>{error}</p>
-        )}
+        )} */}
 
         <button type="submit" disabled={loading}>
           {loading ? 'Signing up...' : 'Sign Up'}
