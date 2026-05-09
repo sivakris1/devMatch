@@ -4,6 +4,8 @@
 @tailwind components;
 @tailwind utilities;
 
+/* CSS classes, ids, boxes and themes */
+
 /* ===== GLOBAL RESET & DARK THEME ===== */
 *, *::before, *::after {
   box-sizing: border-box;
