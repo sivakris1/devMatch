@@ -29,6 +29,27 @@ app.use('/api/auth', authRoutes);
 app.use('/api/profile', profileRoutes);
 app.use('/api/developers', developerRoutes);
 
+// Socket.io
+io.on('connection', (socket)=>{
+  console.log('User Connected:', socket.id)
+
+  //User joins private room
+  socket.on('join_room', (roomId) => {
+    socket.join(roomId)
+    console.log(`socket ${socket.id} joined room: ${roomId}`)
+  })
+
+  //User sends a message
+  socket.on('send_message', (data) => {
+    io.to(data.roomId).emit('receive_data', data)
+  })
+
+  socket.on('disconnect', ()=> {
+    console.log('User disconnected:', socket.id)
+  })
+
+})
+
 app.get('/', (req, res) => {
   res.json({ message: 'DevMatch API is running with ES6!' });
 });
