@@ -2,6 +2,8 @@
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
+import {createServer} from 'http'
+import {Server} from 'socket.io'
 import connectDB from './config/db.js';
 import authRoutes from './routes/auth.js';
 import profileRoutes from './routes/profile.js';
@@ -14,6 +16,10 @@ console.log('🔥 CORRECT SERVER.JS IS RUNNING 🔥');
 
 
 const app = express();
+const httpServer = createServer(app)
+const io = new Server(httpServer,{
+  cors : {origin : '*'}
+})
 const PORT = process.env.PORT || 5000;
 
 app.use(cors());
