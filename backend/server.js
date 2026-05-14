@@ -8,6 +8,7 @@ import connectDB from './config/db.js';
 import authRoutes from './routes/auth.js';
 import profileRoutes from './routes/profile.js';
 import developerRoutes from './routes/developers.js';
+import Message from './models/Message.js';
 
 dotenv.config();
 connectDB();
@@ -40,8 +41,26 @@ io.on('connection', (socket)=>{
   })
 
   //User sends a message
-  socket.on('send_message', (data) => {
-    io.to(data.roomId).emit('receive_data', data)
+  socket.on('send_message', async(data) => {
+
+    try {
+      const newMessage = await Message.create({
+        roomId : data.roomId,
+        senderId : data.senderId,
+        receiverId : data.receiverId,
+        message : data.message
+      })
+
+      io.to(data.roomId).emit('receive_message',{
+        _id : newMessage._id,
+        roomId : newMessage.roomId,
+        senderId: data.senderId,
+        message : newMessage.message,
+        createdAt : newMessage.createdAt
+      })
+    } catch (err) {
+      console.log('Message save error:', err)
+    }
   })
 
   socket.on('disconnect', ()=> {
