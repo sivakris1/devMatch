@@ -9,7 +9,7 @@ router.get('/:userId', verifyToken, async (req, res) => {
   try {
     const myId = req.user.id
     const theirId = req.params.userId
-
+    
     // Create same roomId as frontend
     const roomId = [myId, theirId].sort().join('_')
 
