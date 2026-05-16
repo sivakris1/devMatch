@@ -148,7 +148,7 @@ export default function ChatWindow({
       }}>
         <input
           className="dm-input"
-          placeholder="Type a message..."
+          placeholder="Type a message...."
           value={input}
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={(e) => e.key === 'Enter' && sendMessage()}
