@@ -9,6 +9,8 @@ import authRoutes from './routes/auth.js';
 import profileRoutes from './routes/profile.js';
 import developerRoutes from './routes/developers.js';
 import Message from './models/Message.js';
+import chatRoutes from './routes/chat.js'
+
 
 dotenv.config();
 connectDB();
@@ -29,6 +31,8 @@ app.use(express.json());
 app.use('/api/auth', authRoutes);
 app.use('/api/profile', profileRoutes);
 app.use('/api/developers', developerRoutes);
+app.use('/api/chat', chatRoutes)
+
 
 // Socket.io
 io.on('connection', (socket)=>{
@@ -73,6 +77,10 @@ app.get('/', (req, res) => {
   res.json({ message: 'DevMatch API is running with ES6!' });
 });
 
-app.listen(PORT, () => {
+// app.listen(PORT, () => {
+//   console.log(`server running on port ${PORT}`);
+// });
+
+httpServer.listen(PORT, () => {
   console.log(`server running on port ${PORT}`);
 });
