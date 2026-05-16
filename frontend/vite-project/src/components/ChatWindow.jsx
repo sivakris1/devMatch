@@ -15,30 +15,42 @@ export default function ChatWindow({
   const roomId = [currentUserId, receiverId].sort().join("_");
 
   useEffect(() => {
-    socket.connect();
+  socket.connect()
 
-    socket.emit("join_room", roomId);
+  // ✅ Fix: Check if already connected
+  if (socket.connected) {
+    console.log('✅ Already connected, joining room:', roomId)
+    socket.emit('join_room', roomId)
+  } else {
+    socket.on('connect', () => {
+      console.log('✅ Connected, joining room:', roomId)
+      socket.emit('join_room', roomId)
+    })
+  }
 
-    const loadMessages = async () => {
-      try {
-        const res = await api.get(`/chat/${receiverId}`);
-        setMessages(res.data.data);
-      } catch (err) {
-        console.log("Failed to load messages", err);
-      }
-    };
+  // Load old messages
+  const loadMessages = async () => {
+    try {
+      const res = await api.get(`/chat/${receiverId}`)
+      setMessages(res.data.data)
+    } catch (err) {
+      console.log('❌ Failed to load messages', err)
+    }
+  }
+  loadMessages()
 
-    loadMessages();
+  socket.on('receive_message', (data) => {
+    console.log('✅ Message received!', data)
+    setMessages((prev) => [...prev, data])
+  })
 
-    socket.on("receive_message", (data) => {
-      setMessages((prev) => [...prev, data]);
-    });
+  return () => {
+    socket.off('connect')
+    socket.off('receive_message')
+    socket.disconnect()
+  }
+}, [roomId])
 
-    return () => {
-      socket.off("receive_message");
-      socket.disconnect();
-    };
-  }, [roomId]);
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
