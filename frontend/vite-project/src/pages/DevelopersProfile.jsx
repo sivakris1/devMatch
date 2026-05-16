@@ -164,7 +164,7 @@ export default function DevelopersProfile() {
           </button>
           {chatOpen && (
             <ChatWindow
-              currentUserId={user._id}
+              currentUserId={user.id}
               receiverId={id}
               receiverName={developer.name}
               onClose={() => setChatOpen(false)}
