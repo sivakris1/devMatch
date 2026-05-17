@@ -10,6 +10,7 @@ import profileRoutes from './routes/profile.js';
 import developerRoutes from './routes/developers.js';
 import Message from './models/Message.js';
 import chatRoutes from './routes/chat.js'
+import aiRoutes from './routes/ai.js'
 
 
 dotenv.config();
@@ -32,6 +33,8 @@ app.use('/api/auth', authRoutes);
 app.use('/api/profile', profileRoutes);
 app.use('/api/developers', developerRoutes);
 app.use('/api/chat', chatRoutes)
+app.use('/api/ai', aiRoutes)
+
 
 
 // Socket.io
@@ -83,4 +86,6 @@ app.get('/', (req, res) => {
 
 httpServer.listen(PORT, () => {
   console.log(`server running on port ${PORT}`);
+console.log('Key preview:', process.env.GEMINI_API_KEY?.substring(0, 15))
+
 });
