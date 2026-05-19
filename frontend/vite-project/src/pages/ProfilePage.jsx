@@ -5,6 +5,8 @@ import { useAuth } from '../context/AuthContext';
 import { useUi } from '../api/UiContext';
 import { toast } from 'react-toastify';
 import Navbar from '../components/Navbar';
+import SkillInput from '../components/SkillInput';
+
 
 const avatarColors = [
   'linear-gradient(135deg, #6366f1, #8b5cf6)',
@@ -168,7 +170,7 @@ export default function ProfilePage() {
           {/* Skills */}
           <div style={{ marginBottom: '24px' }}>
             <label className="dm-label">🛠 Skills</label>
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginTop: '8px' }}>
+            {/* <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginTop: '8px' }}>
               {user.skills.length > 0 ? (
                 user.skills.map((s, i) => (
                   isEditing ? (
@@ -184,26 +186,15 @@ export default function ProfilePage() {
               ) : (
                 <p style={{ color: '#475569', fontSize: '14px', margin: 0 }}>No skills added yet</p>
               )}
-            </div>
+            </div> */}
 
             {isEditing && (
               <div style={{ display: 'flex', gap: '10px', marginTop: '12px' }}>
-                <input
-                  className="dm-input"
-                  placeholder="Add a skill (e.g. React)"
-                  value={newSkill}
-                  onChange={(e) => setNewSkill(e.target.value)}
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter') {
-                      e.preventDefault();
-                      const skill = newSkill.trim();
-                      if (!skill || formData.skills.includes(skill)) return;
-                      setFormData({ ...formData, skills: [...formData.skills, skill] });
-                      setNewSkill('');
-                    }
-                  }}
-                  style={{ flex: 1 }}
-                />
+                <SkillInput
+  skills={formData.skills}
+  setSkills={(newSkills) => setFormData({ ...formData, skills: newSkills })}
+/>
+
                 <button
                   className="btn-primary"
                   onClick={() => {
