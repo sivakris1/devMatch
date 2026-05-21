@@ -7,6 +7,7 @@ import DevelopersPage from "./pages/DevelopersPage";
 import DevelopersProfile from "./pages/DevelopersProfile";
 import RegisterPage from "./pages/RegisterPage";
 import PublicRoute from "./components/PublicRoute";
+import MessagesPage from "./pages/MessagesPage";
 
 function App() {
   return (
@@ -56,6 +57,15 @@ function App() {
         element={
           <ProtectedRoute>
             <DevelopersProfile />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/messages"
+        element={
+          <ProtectedRoute>
+            <MessagesPage />
           </ProtectedRoute>
         }
       />
