@@ -28,6 +28,12 @@ export default function Navbar() {
           🔍 Discover
         </Link>
         <Link
+          to="/messages"
+          className={`nav-link ${isActive('/messages') ? 'active' : ''}`}
+        >
+          💬 Messages
+        </Link>
+        <Link
           to="/profile"
           className={`nav-link ${isActive('/profile') ? 'active' : ''}`}
         >
