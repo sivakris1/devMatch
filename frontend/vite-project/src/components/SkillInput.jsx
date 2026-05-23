@@ -80,7 +80,8 @@ export default function SkillInput({ skills, setSkills }) {
             </span>
           ))}
         </div>
-      )} */}
+      )} */
+      }
 
       {/* Input */}
       <input
