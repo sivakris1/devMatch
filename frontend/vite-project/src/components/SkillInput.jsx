@@ -61,7 +61,7 @@ export default function SkillInput({ skills, setSkills }) {
     <div style={{ position: 'relative' }}>
 
       {/* Added Skills Tags */}
-      {skills.length > 0 && (
+      {/* {skills.length > 0 && (
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginBottom: '12px' }}>
           {skills.map(skill => (
             <span key={skill} style={{
@@ -80,7 +80,7 @@ export default function SkillInput({ skills, setSkills }) {
             </span>
           ))}
         </div>
-      )}
+      )} */}
 
       {/* Input */}
       <input
