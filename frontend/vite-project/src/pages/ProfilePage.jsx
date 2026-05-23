@@ -170,7 +170,7 @@ export default function ProfilePage() {
           {/* Skills */}
           <div style={{ marginBottom: '24px' }}>
             <label className="dm-label">🛠 Skills</label>
-            {/* <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginTop: '8px' }}>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginTop: '8px' }}>
               {user.skills.length > 0 ? (
                 user.skills.map((s, i) => (
                   isEditing ? (
@@ -186,7 +186,7 @@ export default function ProfilePage() {
               ) : (
                 <p style={{ color: '#475569', fontSize: '14px', margin: 0 }}>No skills added yet</p>
               )}
-            </div> */}
+            </div>
 
             {isEditing && (
               <div style={{ display: 'flex', gap: '10px', marginTop: '12px' }}>
