@@ -1,34 +1,25 @@
 import auth from "../middleware/auth.js";
 import User from "../models/User.js";
-import express from 'express';
+import express from "express";
 
-const router = express.Router()
+const router = express.Router();
 
+router.get("/", auth, async (req, res) => {
+  try {
+    const user = await User.findById(req.userId).select("-password");
 
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
 
-
-
-
-
-router.get('/',auth, async(req,res)=>{
-    try {
-        const user = await User.findById(req.userId).select('-password')
-
-        if(!user){
-           return res.status(404).json({ message: 'User not found' });
-        }
-
-        return res.json({
+    return res.json({
       success: true,
-      data: user
+      data: user,
     });
-
-    } catch (error) {
-    
-    res.status(500).json({ message: 'Server error' });
+  } catch (error) {
+    res.status(500).json({ message: "Server error" });
   }
-
-})
+});
 
 //Updating Profile
 // router.put('/',auth, async(req,res)=>{
@@ -46,14 +37,14 @@ router.get('/',auth, async(req,res)=>{
 //      const validExperienceLevels = ['Beginner', 'Intermediate', 'Advanced', 'Expert'];
 
 //     if (experienceLevel && !validExperienceLevels.includes(experienceLevel)) {
-//       return res.status(400).json({ 
-//         message: 'Invalid experience level. Must be one of: Beginner, Intermediate, Advanced, Expert' 
+//       return res.status(400).json({
+//         message: 'Invalid experience level. Must be one of: Beginner, Intermediate, Advanced, Expert'
 //       });
 //     }
 
 //      if (skills && !Array.isArray(skills)) {
-//       return res.status(400).json({ 
-//         message: 'Skills must be an array' 
+//       return res.status(400).json({
+//         message: 'Skills must be an array'
 //       });
 //     }
 
@@ -65,7 +56,7 @@ router.get('/',auth, async(req,res)=>{
 // console.log("Incoming skills:", skills);
 
 //     if (experienceLevel !== undefined) updatedFields.experienceLevel = experienceLevel
-//     if (bio !== undefined) updatedFields.bio = bio 
+//     if (bio !== undefined) updatedFields.bio = bio
 //     if (location !== undefined) updatedFields.location = location;
 //     if (github !== undefined) updatedFields.github = github;
 //     if (linkedin !== undefined) updatedFields.linkedin = linkedin;
@@ -74,15 +65,11 @@ router.get('/',auth, async(req,res)=>{
 //     // const updatedUser = await User.findByIdAndUpdate(req.user._id, {$set : updatedFields}, { new: true, runValidators: true }
 //     // ).select('-password');
 
- 
-
-
 //     const updatedUser = await User.findByIdAndUpdate(
 //     req.userId,
 //     { $set: updatedFields },
 //     { new: true, runValidators: true }
 //     ).select('-password');
-
 
 //      if (!updatedUser) {
 //       return res.status(404).json({ message: 'User not found' });
@@ -95,19 +82,19 @@ router.get('/',auth, async(req,res)=>{
 //     });
 //   } catch (error) {
 //     console.error('Update profile error:', error);
-    
+
 //     if (error.name === 'ValidationError') {
-//       return res.status(400).json({ 
+//       return res.status(400).json({
 //         message: 'Validation error',
 //         errors: Object.values(error.errors).map(err => err.message)
 //       });
 //     }
-    
+
 //     res.status(500).json({ message: 'Server error' });
 //   }
 // })
 
-router.put('/', auth, async (req, res) => {
+router.put("/", auth, async (req, res) => {
   try {
     const {
       skills,
@@ -119,75 +106,52 @@ router.put('/', auth, async (req, res) => {
       portfolio,
     } = req.body;
 
-    
-
-
     const update = {};
 
-    // ✅ SAFE SKILLS UPDATE (NO MORE WIPES)
-    if (Array.isArray(skills)) {
-      update.skills = skills;
-    }
-
-    // other fields (normal replace is fine)
-    if (experienceLevel !== undefined)
-      update.$set = { ...update.$set, experienceLevel };
-
-    if (bio !== undefined)
-      update.$set = { ...update.$set, bio };
-
-    if (location !== undefined)
-      update.$set = { ...update.$set, location };
-
-    if (github !== undefined)
-      update.github = github;
-
-    if (linkedin !== undefined)
-      update.linkedin = linkedin;
-
-    if (portfolio !== undefined)
-      update.portfolio = portfolio;
-
+    if (Array.isArray(skills)) update.skills = skills;
+    if (experienceLevel !== undefined) update.experienceLevel = experienceLevel;
+    if (bio !== undefined) update.bio = bio;
+    if (location !== undefined) update.location = location;
+    if (github !== undefined) update.github = github;
+    if (linkedin !== undefined) update.linkedin = linkedin;
+    if (portfolio !== undefined) update.portfolio = portfolio;
+    
     const updatedUser = await User.findByIdAndUpdate(
       req.userId,
-      {$set:update},
-      { new: true, runValidators: true }
-    ).select('-password');
+      { $set: update }, // ← clean single $set ✅
+      { new: true, runValidators: true },
+    ).select("-password");
 
     res.json({
       success: true,
       data: updatedUser,
     });
   } catch (error) {
-   
-    res.status(500).json({ message: 'Server error' });
+    res.status(500).json({ message: "Server error" });
   }
 });
 
-
-
 //Fetching Profile of Others
 
-router.get('/:userId', async(req,res) => {
-    try {
-        const {userId} = req.params;
-         if (!userId.match(/^[0-9a-fA-F]{24}$/)) {
-      return res.status(400).json({ message: 'Invalid user ID format' });
+router.get("/:userId", async (req, res) => {
+  try {
+    const { userId } = req.params;
+    if (!userId.match(/^[0-9a-fA-F]{24}$/)) {
+      return res.status(400).json({ message: "Invalid user ID format" });
     }
 
-    const user = await User.findById(userId).select('-password -email');
-    
+    const user = await User.findById(userId).select("-password -email");
+
     if (!user) {
-      return res.status(404).json({ message: 'User not found' });
+      return res.status(404).json({ message: "User not found" });
     }
 
-   return res.json({
+    return res.json({
       success: true,
-      data: user
+      data: user,
     });
   } catch (error) {
-    
-    res.status(500).json({ message: 'Server error' });
+    res.status(500).json({ message: "Server error" });
   }
 });
 
