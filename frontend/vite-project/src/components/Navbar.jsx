@@ -1,6 +1,9 @@
 // src/components/Navbar.jsx
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { useEffect, useState } from 'react';
+import api from '../api/client';
+
 
 export default function Navbar() {
   const { logout } = useAuth();
@@ -13,6 +16,21 @@ export default function Navbar() {
   };
 
   const isActive = (path) => location.pathname === path;
+
+    const [unreadCount, setUnreadCount] = useState(0)
+
+  useEffect(() => {
+    const fetchUnread = async () => {
+      try {
+        const res = await api.get('/chat/unread-count')
+        setUnreadCount(res.data.count)
+      } catch {}
+    }
+    fetchUnread()
+    const interval = setInterval(fetchUnread, 10000) // check every 10 seconds
+    return () => clearInterval(interval)
+  }, [])
+
 
   return (
     <nav className="navbar">
@@ -27,12 +45,33 @@ export default function Navbar() {
         >
           🔍 Discover
         </Link>
-        <Link
+                <Link
           to="/messages"
           className={`nav-link ${isActive('/messages') ? 'active' : ''}`}
+          style={{ position: 'relative' }}
         >
           💬 Messages
+          {unreadCount > 0 && (
+            <span style={{
+              position: 'absolute',
+              top: '2px',
+              right: '2px',
+              background: '#ef4444',
+              color: 'white',
+              fontSize: '10px',
+              fontWeight: '700',
+              borderRadius: '50%',
+              width: '16px',
+              height: '16px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}>
+              {unreadCount > 9 ? '9+' : unreadCount}
+            </span>
+          )}
         </Link>
+
         <Link
           to="/profile"
           className={`nav-link ${isActive('/profile') ? 'active' : ''}`}
