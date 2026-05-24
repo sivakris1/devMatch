@@ -1,6 +1,7 @@
 import mongoose from 'mongoose'
 
 const messageSchema = new mongoose.Schema(
+
   {
     roomId: {
       type: String,
@@ -22,6 +23,7 @@ const messageSchema = new mongoose.Schema(
       trim: true
     },
     read: {
+      
       type: Boolean,
       default: false
     }
