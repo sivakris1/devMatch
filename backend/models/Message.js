@@ -23,7 +23,6 @@ const messageSchema = new mongoose.Schema(
       trim: true
     },
     read: {
-      
       type: Boolean,
       default: false
     }
