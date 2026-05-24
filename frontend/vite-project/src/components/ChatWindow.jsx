@@ -33,6 +33,8 @@ export default function ChatWindow({
     try {
       const res = await api.get(`/chat/${receiverId}`)
       setMessages(res.data.data)
+      // Mark messages as read when active chat is opened
+      await api.put(`/chat/mark-read/${receiverId}`)
     } catch (err) {
       console.log('❌ Failed to load messages', err)
     }
@@ -42,6 +44,12 @@ export default function ChatWindow({
   socket.on('receive_message', (data) => {
     console.log('✅ Message received!', data)
     setMessages((prev) => [...prev, data])
+    // Mark as read immediately if it's from the active chat partner
+    if (data.senderId === receiverId || data.senderId?._id === receiverId) {
+      api.put(`/chat/mark-read/${receiverId}`).catch(err => {
+        console.error('Failed to mark incoming message as read:', err)
+      })
+    }
   })
 
   return () => {

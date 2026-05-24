@@ -7,6 +7,37 @@ const router = express.Router()
 // ⚠️ /conversations MUST come before /:userId
 // otherwise Express treats "conversations" as a userId param
 
+//GET unread msgs count of specific user
+router.get('/unread-count', auth, async(req,res)=>{
+
+  try {
+    const count = await Message.countDocuments({
+      receiverId : req.userId,
+      read : false
+    })
+
+    res.json({success : true, count})
+  } catch (error) {
+      res.status(500).json({ message: 'Failed to get unread count' })
+  }
+})
+
+//update the read to true when user reads the received msgs
+router.put('/mark-read/:userId', auth, async(req,res)=>{
+
+  try {
+    await Message.updateMany(
+      {senderId : req.params.userId, receiverId: req.userId, read : false},
+      {$set : {read : true}}
+    )
+
+    res.json({success : true})
+  } catch (error) {
+      res.status(500).json({ message: 'Failed to mark as read' })
+  }
+})
+
+
 // GET all conversations for current user
 router.get('/conversations', auth, async (req, res) => {
   try {
@@ -33,10 +64,17 @@ router.get('/conversations', auth, async (req, res) => {
           ? msg.receiverId
           : msg.senderId
 
+        const unreadCount = await Message.countDocuments({
+          senderId: otherUser._id,
+          receiverId: myId,
+          read: false
+        })
+
         conversations.push({
           roomId: msg.roomId,
           lastMessage: msg.message,
           lastMessageTime: msg.createdAt,
+          unreadCount,
           otherUser: {
             _id: otherUser._id,
             name: otherUser.name

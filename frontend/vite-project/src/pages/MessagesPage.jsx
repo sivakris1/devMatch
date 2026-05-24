@@ -103,7 +103,21 @@ export default function MessagesPage() {
               return (
                 <div
                   key={conv.roomId}
-                  onClick={() => setSelectedUser(conv.otherUser)}
+                  onClick={() => {
+                    setSelectedUser(conv.otherUser)
+                    if (conv.unreadCount > 0) {
+                      api.put(`/chat/mark-read/${conv.otherUser._id}`).catch(err => {
+                        console.error('Failed to mark messages as read:', err)
+                      })
+                      setConversations(prev =>
+                        prev.map(c =>
+                          c.roomId === conv.roomId
+                            ? { ...c, unreadCount: 0 }
+                            : c
+                        )
+                      )
+                    }
+                  }}
                   style={{
                     display: 'flex',
                     alignItems: 'center',
@@ -170,8 +184,28 @@ export default function MessagesPage() {
                     </p>
                   </div>
 
-                  {/* Arrow */}
-                  <span style={{ color: '#475569', fontSize: '16px', flexShrink: 0 }}>›</span>
+                  {/* Arrow or Unread Badge */}
+                  {conv.unreadCount > 0 ? (
+                    <span style={{
+                      background: '#ef4444',
+                      color: 'white',
+                      fontSize: '11px',
+                      fontWeight: '700',
+                      borderRadius: '50%',
+                      minWidth: '20px',
+                      height: '20px',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      flexShrink: 0,
+                      padding: '0 4px',
+                      boxShadow: '0 2px 6px rgba(239, 68, 68, 0.4)'
+                    }}>
+                      {conv.unreadCount > 9 ? '9+' : conv.unreadCount}
+                    </span>
+                  ) : (
+                    <span style={{ color: '#475569', fontSize: '16px', flexShrink: 0 }}>›</span>
+                  )}
                 </div>
               )
             })}
