@@ -16,10 +16,13 @@ const SKILLS = [
 export default function SkillInput({ skills, setSkills }) {
   const [input, setInput] = useState('')
   const [suggestions, setSuggestions] = useState([])
+    const [activeSuggestionIndex, setActiveSuggestionIndex] = useState(-1)
+
 
   const handleInputChange = (e) => {
     const value = e.target.value
     setInput(value)
+    setActiveSuggestionIndex(-1) // Reset selection when user types
 
     if (value.trim().length < 1) {
       setSuggestions([])
@@ -42,26 +45,64 @@ export default function SkillInput({ skills, setSkills }) {
     }
     setInput('')
     setSuggestions([])
+        setActiveSuggestionIndex(-1) // Reset index on add
+
   }
 
   const removeSkill = (skillToRemove) => {
     setSkills(skills.filter(s => s !== skillToRemove))
   }
 
-  const handleKeyDown = (e) => {
-    if (e.key === 'Enter' && suggestions.length > 0) {
-      addSkill(suggestions[0]) // add first suggestion on Enter
+      const handleKeyDown = (e) => {
+    // Arrow Down
+    if (e.key === 'ArrowDown') {
+      e.preventDefault() // Prevent cursor jumping
+      if (activeSuggestionIndex < suggestions.length - 1) {
+        setActiveSuggestionIndex(activeSuggestionIndex + 1)
+      }
     }
-    if (e.key === 'Escape') {
+    // Arrow Up
+    else if (e.key === 'ArrowUp') {
+      e.preventDefault() // Prevent cursor jumping
+      if (activeSuggestionIndex > -1) {
+        setActiveSuggestionIndex(activeSuggestionIndex - 1)
+      }
+    }
+    // Enter Key
+    else if (e.key === 'Enter') {
+      e.preventDefault()
+      
+      // If we have highlighted a suggestion with arrow keys, add that one!
+      if (activeSuggestionIndex > -1 && activeSuggestionIndex < suggestions.length) {
+        addSkill(suggestions[activeSuggestionIndex])
+      } 
+      // If nothing is highlighted but suggestions exist, add the first one
+      else if (suggestions.length > 0) {
+        addSkill(suggestions[0])
+      } 
+      // Otherwise, add what the user manually typed
+      else if (input.trim()) {
+        addSkill(input.trim())
+      }
+    }
+    // Escape Key
+    else if (e.key === 'Escape') {
       setSuggestions([])
+      setActiveSuggestionIndex(-1)
     }
   }
+
+
+
+  
 
   return (
     <div style={{ position: 'relative' }}>
 
       {/* Added Skills Tags */}
-      {/* {skills.length > 0 && (
+      
+      
+      {skills.length  > 0 && (
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginBottom: '12px' }}>
           {skills.map(skill => (
             <span key={skill} style={{
@@ -80,9 +121,8 @@ export default function SkillInput({ skills, setSkills }) {
             </span>
           ))}
         </div>
-      )} */
-      }
-
+      )} 
+    
       {/* Input */}
       <input
         className="dm-input"
@@ -106,7 +146,7 @@ export default function SkillInput({ skills, setSkills }) {
           overflow: 'hidden',
           boxShadow: '0 20px 40px rgba(0,0,0,0.4)'
         }}>
-          {suggestions.map((skill, i) => (
+                    {suggestions.map((skill, i) => (
             <div
               key={skill}
               onClick={() => addSkill(skill)}
@@ -115,18 +155,23 @@ export default function SkillInput({ skills, setSkills }) {
                 cursor: 'pointer',
                 color: '#cbd5e1',
                 fontSize: '14px',
+                // Highlight suggestion if active index matches:
+                background: i === activeSuggestionIndex 
+                  ? 'rgba(99, 102, 241, 0.25)' 
+                  : 'transparent',
                 borderBottom: i < suggestions.length - 1
                   ? '1px solid rgba(255,255,255,0.04)' : 'none',
                 transition: 'background 0.15s ease',
                 display: 'flex', alignItems: 'center', gap: '10px'
               }}
-              onMouseEnter={e => e.target.style.background = 'rgba(99,102,241,0.1)'}
-              onMouseLeave={e => e.target.style.background = 'transparent'}
+              onMouseEnter={() => setActiveSuggestionIndex(i)} // Mouse hover updates highlight index
+              onMouseLeave={() => setActiveSuggestionIndex(-1)}
             >
               <span style={{ fontSize: '16px' }}>⚡</span>
               {skill}
             </div>
           ))}
+
         </div>
       )}
     </div>
