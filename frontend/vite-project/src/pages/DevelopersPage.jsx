@@ -3,6 +3,7 @@ import api from '../api/client';
 import { useNavigate } from 'react-router-dom';
 import { useUi } from '../api/UiContext';
 import Navbar from '../components/Navbar';
+import SkillInput from '../components/SkillInput';
 
 const avatarColors = [
   'linear-gradient(135deg, #6366f1, #8b5cf6)',
@@ -30,7 +31,7 @@ const DevelopersPage = () => {
   const [aiRecommendations, setAiRecommendations] = useState([]);
   const [activeTab, setActiveTab] = useState('discover'); // 'discover' | 'ai'
   const [aiLoading, setAiLoading] = useState(false)
-  const [skills, setSkills] = useState('');
+  const [skills, setSkills] = useState([]);
   const [experienceLevel, setExperienceLevel] = useState('');
   const [location, setLocation] = useState('');
 
@@ -76,7 +77,7 @@ const DevelopersPage = () => {
     setLoading(true);
     try {
       const payload = {
-        skills: skills ? skills.split(',').map((s) => s.trim()) : undefined,
+        skills:  skills.length > 0 ? skills : undefined ,
         experienceLevel: experienceLevel || undefined,
         location: location || undefined,
       };
@@ -158,16 +159,24 @@ const DevelopersPage = () => {
         {activeTab === 'discover' && (
           <>
             {/* Search Filters */}
-            <div className="glass-card fade-in-up" style={{ padding: '24px', marginBottom: '28px' }}>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr auto', gap: '16px', alignItems: 'end' }}>
-                <div>
-                  <label className="dm-label">🛠 Skills</label>
-                  <input className="dm-input" placeholder="React, Node.js..." value={skills}
-                    onChange={(e) => setSkills(e.target.value)}
-                    onKeyDown={(e) => e.key === 'Enter' && searchDevelopers()} />
+                        {/* Search Filters */}
+            <div className="glass-card fade-in-up" style={{ 
+              padding: '24px', 
+              marginBottom: '28px',
+              position: 'relative', // Enables proper z-index stacking
+              zIndex: 10            // Floats suggestions OVER the developer cards list below
+            }}>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1.2fr 1fr auto', gap: '16px', alignItems: 'end' }}>
+                
+                {/* 1. Skills Autocomplete */}
+                <div style={{ position: 'relative' }}>
+                  <label className="dm-label" style={{ marginBottom: '8px', display: 'block' }}>🛠 Skills</label>
+                  <SkillInput skills={skills} setSkills={setSkills} />
                 </div>
+                
+                {/* 2. Experience level */}
                 <div>
-                  <label className="dm-label">📊 Experience</label>
+                  <label className="dm-label" style={{ marginBottom: '8px', display: 'block' }}>📊 Experience</label>
                   <select className="dm-select" value={experienceLevel}
                     onChange={(e) => setExperienceLevel(e.target.value)}>
                     <option value="">Any level</option>
@@ -177,17 +186,22 @@ const DevelopersPage = () => {
                     <option value="Expert">Expert</option>
                   </select>
                 </div>
+                
+                {/* 3. Location */}
                 <div>
-                  <label className="dm-label">📍 Location</label>
+                  <label className="dm-label" style={{ marginBottom: '8px', display: 'block' }}>📍 Location</label>
                   <input className="dm-input" placeholder="City, Country..." value={location}
                     onChange={(e) => setLocation(e.target.value)}
                     onKeyDown={(e) => e.key === 'Enter' && searchDevelopers()} />
                 </div>
+                
+                {/* 4. Search Button */}
                 <button className="btn-primary" onClick={searchDevelopers} disabled={loading}>
                   <span>Search</span>
                 </button>
               </div>
             </div>
+
 
             {/* Developer Cards */}
             {developers.length === 0 ? (
