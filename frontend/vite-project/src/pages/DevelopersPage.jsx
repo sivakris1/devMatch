@@ -171,7 +171,10 @@ const DevelopersPage = () => {
                 {/* 1. Skills Autocomplete */}
                 <div style={{ position: 'relative' }}>
                   <label className="dm-label" style={{ marginBottom: '8px', display: 'block' }}>🛠 Skills</label>
-                  <SkillInput skills={skills} setSkills={setSkills} />
+
+                  <SkillInput  skills={skills} 
+                  setSkills={setSkills}    />
+                  
                 </div>
                 
                 {/* 2. Experience level */}
