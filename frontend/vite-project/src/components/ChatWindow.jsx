@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import socket from "../api/socket";
 import api from "../api/client";
+import { useAuth } from "../context/AuthContext";
+
 
 export default function ChatWindow({
   currentUserId,
@@ -9,6 +11,9 @@ export default function ChatWindow({
   onClose,
 }) {
   const [messages, setMessages] = useState([]);
+  const { onlineUsers } = useAuth();
+  const isOnline = onlineUsers.includes(receiverId);
+
   const [input, setInput] = useState("");
   const bottomRef = useRef(null);
 
@@ -55,7 +60,6 @@ export default function ChatWindow({
   return () => {
     socket.off('connect')
     socket.off('receive_message')
-    socket.disconnect()
   }
 }, [roomId])
 
@@ -99,10 +103,15 @@ export default function ChatWindow({
         borderRadius: '16px 16px 0 0'
       }}>
         <div>
+                  <div>
           <p style={{ margin: 0, fontWeight: '700', color: '#f1f5f9', fontSize: '15px' }}>
             💬 {receiverName}
           </p>
-          <p style={{ margin: 0, fontSize: '11px', color: '#6ee7b7' }}>● Online</p>
+          <p style={{ margin: 0, fontSize: '11px', color: isOnline ? '#6ee7b7' : '#94a3b8' }}>
+            ● {isOnline ? 'Online' : 'Offline'}
+          </p>
+        </div>
+
         </div>
         <button onClick={onClose} style={{
           background: 'rgba(255,255,255,0.06)',

@@ -25,7 +25,7 @@ const AVATAR_COLORS = [
 ]
 
 export default function MessagesPage() {
-  const { user } = useAuth()
+  const { user, onlineUsers } = useAuth()
   const [conversations, setConversations] = useState([])
   const [loading, setLoading] = useState(true)
   const [selectedUser, setSelectedUser] = useState(null) // { _id, name }
@@ -165,16 +165,29 @@ export default function MessagesPage() {
                   {/* Info */}
                   <div style={{ flex: 1, minWidth: 0 }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '4px' }}>
-                      <p style={{
-                        margin: 0, fontWeight: '600', fontSize: '15px',
-                        color: isSelected ? '#a5b4fc' : '#f1f5f9'
-                      }}>
-                        {conv.otherUser.name}
-                      </p>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                        <p style={{
+                          margin: 0, fontWeight: '600', fontSize: '15px',
+                          color: isSelected ? '#a5b4fc' : '#f1f5f9'
+                        }}>
+                          {conv.otherUser.name}
+                        </p>
+                        {onlineUsers.includes(conv.otherUser._id) && (
+                          <span style={{
+                            width: '7px',
+                            height: '7px',
+                            background: '#10b981',
+                            borderRadius: '50%',
+                            boxShadow: '0 0 6px #10b981',
+                            display: 'inline-block'
+                          }} />
+                        )}
+                      </div>
                       <span style={{ fontSize: '11px', color: '#475569', flexShrink: 0, marginLeft: '8px' }}>
                         {timeAgo(conv.lastMessageTime)}
                       </span>
                     </div>
+                    {/* Restored Last Message Preview */}
                     <p style={{
                       margin: 0, fontSize: '13px', color: '#64748b',
                       whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis',
@@ -182,7 +195,7 @@ export default function MessagesPage() {
                     }}>
                       {conv.lastMessage}
                     </p>
-                  </div>
+                  </div> {/* Restored closing tag for Info column */}
 
                   {/* Arrow or Unread Badge */}
                   {conv.unreadCount > 0 ? (

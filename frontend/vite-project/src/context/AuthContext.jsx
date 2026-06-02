@@ -12,6 +12,8 @@ export const AuthProvider = ({ children }) => {
     return u ? JSON.parse(u) : null;
   });
 
+  const [onlineUsers, setOnlineUsers] = useState([]);
+
   useEffect(() => {
     token ? localStorage.setItem("token", token)
           : localStorage.removeItem("token");
@@ -88,7 +90,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ token, user, isAuthenticated: !!token, login, logout }}>
+    <AuthContext.Provider value={{ token, user, isAuthenticated: !!token, login, logout, onlineUsers }}>
       {children}
     </AuthContext.Provider>
   );

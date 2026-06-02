@@ -4,6 +4,8 @@ import { useNavigate } from 'react-router-dom';
 import { useUi } from '../api/UiContext';
 import Navbar from '../components/Navbar';
 import SkillInput from '../components/SkillInput';
+import { useAuth } from '../context/AuthContext';
+
 
 const avatarColors = [
   'linear-gradient(135deg, #6366f1, #8b5cf6)',
@@ -28,6 +30,8 @@ const DevelopersPage = () => {
   const navigate = useNavigate();
   const { loading, setLoading, setError } = useUi();
   const [developers, setDevelopers] = useState([]);
+  const { onlineUsers } = useAuth();
+
   const [aiRecommendations, setAiRecommendations] = useState([]);
   const [activeTab, setActiveTab] = useState('discover'); // 'discover' | 'ai'
   const [aiLoading, setAiLoading] = useState(false)
@@ -176,7 +180,7 @@ const DevelopersPage = () => {
                   setSkills={setSkills}    />
                   
                 </div>
-                
+
                 {/* 2. Experience level */}
                 <div>
                   <label className="dm-label" style={{ marginBottom: '8px', display: 'block' }}>📊 Experience</label>
@@ -223,10 +227,23 @@ const DevelopersPage = () => {
                       <div className="avatar" style={{ background: avatarColors[index % avatarColors.length] }}>
                         {dev.name.charAt(0).toUpperCase()}
                       </div>
-                      <div style={{ flex: 1 }}>
-                        <h3 style={{ color: '#f1f5f9', fontWeight: '700', fontSize: '16px', margin: '0 0 4px 0' }}>{dev.name}</h3>
+                         <div style={{ flex: 1 }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
+                          <h3 style={{ color: '#f1f5f9', fontWeight: '700', fontSize: '16px', margin: 0 }}>{dev.name}</h3>
+                          {onlineUsers.includes(dev._id) && (
+                            <span style={{
+                              width: '8px',
+                              height: '8px',
+                              background: '#10b981',
+                              borderRadius: '50%',
+                              boxShadow: '0 0 8px #10b981',
+                              display: 'inline-block'
+                            }} title="Online" />
+                          )}
+                        </div>
                         <span className={`badge ${getBadgeClass(dev.experienceLevel)}`}>{dev.experienceLevel}</span>
                       </div>
+
                       {dev.skillOverlapCount > 0 && (
                         <div className="match-badge">✨ {dev.skillOverlapCount}</div>
                       )}
