@@ -38,8 +38,22 @@ app.use('/api/ai', aiRoutes)
 
 
 // Socket.io
+const onlineUsers = new Map();
+
 io.on('connection', (socket)=>{
   console.log('User Connected:', socket.id)
+
+  socket.on('register_user', (userId) => {
+    onlineUsers.set(userId, socket.id);
+    console.log(`🟢 User registered online: ${userId}`);
+
+    socket.broadcast.emit('user_online', userId);
+  })
+
+  socket.on('get_online_users', ()=> {
+    socket.emit('online_users_list', Array.from(onlineUsers.keys()))
+  });
+
 
   //User joins private room
   socket.on('join_room', (roomId) => {
@@ -72,6 +86,21 @@ io.on('connection', (socket)=>{
 
   socket.on('disconnect', ()=> {
     console.log('User disconnected:', socket.id)
+
+    let offlineUserId = null;
+    for (const [userId, socketId] of onlineUsers.entries()) {
+      if (socketId === socket.id) {
+        onlineUsers.delete(userId);
+        offlineUserId = userId;
+        break;
+      }
+    }
+
+    //Broadcast "user_offline" to everyone else
+    if(offlineUserId){
+      console.log(`🔴 User went offline: ${offlineUserId}`);
+      socket.broadcast.emit('user_offline', offlineUserId)
+    }
   })
 
 })
