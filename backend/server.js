@@ -11,6 +11,8 @@ import developerRoutes from './routes/developers.js';
 import Message from './models/Message.js';
 import chatRoutes from './routes/chat.js'
 import aiRoutes from './routes/ai.js'
+import paymentRoutes from './routes/payment.js';
+
 
 
 dotenv.config();
@@ -34,6 +36,9 @@ app.use('/api/profile', profileRoutes);
 app.use('/api/developers', developerRoutes);
 app.use('/api/chat', chatRoutes)
 app.use('/api/ai', aiRoutes)
+
+app.use('/api/payment', paymentRoutes);
+
 
 
 
