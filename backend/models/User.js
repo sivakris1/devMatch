@@ -55,7 +55,8 @@ const userSchema = new mongoose.Schema(
       type: String,
       trim: true,
     },
-     isPremium: {
+    //For premium subscription users
+     isPremium : { 
       type: Boolean,
       default: false,
     },
