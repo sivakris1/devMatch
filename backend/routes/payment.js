@@ -36,6 +36,38 @@ router.post('/order', auth, async (req, res) => {
   }
 });
 
+router.post('/verify', auth, async(req,res) => {
+   try {
+     const {razorpay_order_id, razorpay_payment_id, razorpay_signature} = req.body;
 
+  const sign = razorpay_order_id + "|" + razorpay_payment_id
 
+  const expectedSign = crypto.createHmac('sha256', process.env.RAZORPAY_KEY_SECRET).update(sign).digest('hex')
+
+  //now checking if payment is real and successful
+
+  if(expectedSign === razorpay_signature){
+
+    const user = await User.findByIdAndUpdate(
+      req.userId,
+      {isPremium: true },
+      {new : true}
+    ).select("-password")
+     return res.json({
+        success: true,
+        message: 'Payment verified! Welcome to Premium!',
+        user,
+      });
+    } else {
+      // ❌ Signature mismatch — someone is faking it
+      return res.status(400).json({
+        success: false,
+        message: 'Invalid payment signature',
+      });
+    }
+  } catch (error) {
+    console.error('Verify payment error:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
 export default router;
