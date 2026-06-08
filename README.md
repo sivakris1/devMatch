@@ -31,6 +31,11 @@ DevMatch is a premium, full-stack developer matching and collaboration platform.
 - **Search Engine:** Filter and query developers by skill tags, experience tiers (Beginner, Intermediate, Advanced, Expert), and geographical location.
 - **Interactive Skill Autocomplete:** Modern component for tag selection and profile skills editing.
 
+### 💳 6. Secure Razorpay Payment Gateway
+- **Razorpay Integration:** Full-stack integration with order generation and client checkout using Razorpay Test Mode.
+- **HMAC Signature Verification:** Prevents payment faking using cryptographic verification on the backend.
+- **Premium Upgrades:** Automatically updates user accounts to Premium, unlocking exclusive features.
+
 ---
 
 ## 🛠️ Tech Stack
@@ -65,6 +70,7 @@ devmatch/
 │   │   ├── ai.js
 │   │   ├── auth.js
 │   │   ├── chat.js
+│   │   ├── payment.js
 │   │   └── profile.js
 │   ├── server.js
 │   └── .env
