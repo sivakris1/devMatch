@@ -3,7 +3,8 @@ import Razorpay from 'razorpay';
 import crypto from 'crypto'
 import auth from '../middleware/auth.js';
 import User from '../models/User.js';
-
+import dotenv from 'dotenv'; // 1. Import dotenv
+dotenv.config();
 const router = express.Router();
 
 const razorpay = new Razorpay({
