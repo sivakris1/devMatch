@@ -8,6 +8,7 @@ import DevelopersProfile from "./pages/DevelopersProfile";
 import RegisterPage from "./pages/RegisterPage";
 import PublicRoute from "./components/PublicRoute";
 import MessagesPage from "./pages/MessagesPage";
+import PremiumPage from "./pages/PremiumPage";
 
 function App() {
   return (
@@ -69,6 +70,16 @@ function App() {
           </ProtectedRoute>
         }
       />
+
+      <Route
+        path="/premium"
+        element={
+          <ProtectedRoute>
+            <PremiumPage />
+          </ProtectedRoute>
+        }
+      />
+
     </Routes>
   );
 }
