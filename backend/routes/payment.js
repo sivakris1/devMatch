@@ -21,7 +21,8 @@ router.post('/order', auth, async (req, res) => {
       amount: 49900, // ₹499 in paisa
       currency: 'INR',
       //receipt of the user 
-      receipt: `receipt_order_${req.userId}_${Date.now()}`,
+      receipt: `rcpt_${req.userId.substring(12)}_${Date.now()}`
+
     };
 
     //for API call from  server to Razorpay's servers (for creating bill to payment).
@@ -30,7 +31,9 @@ router.post('/order', auth, async (req, res) => {
     res.json({
       success: true,
       order,
+      key_id: process.env.RAZORPAY_KEY_ID, // Send key dynamically
     });
+    
   } catch (error) {
     console.error('Create order error:', error);
     res.status(500).json({ message: 'Failed to create payment order' });
