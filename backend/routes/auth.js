@@ -49,6 +49,7 @@ router.post(
           id: user._id,
           name: user.name,
           email: user.email,
+          isPremium: user.isPremium,
         },
       });
     } catch (error) {
@@ -97,6 +98,7 @@ router.post(
           id: user._id,
           name: user.name,
           email: user.email,
+          isPremium: user.isPremium,
         },
       });
     } catch (error) {
