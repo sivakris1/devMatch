@@ -30,7 +30,7 @@ const DevelopersPage = () => {
   const navigate = useNavigate();
   const { loading, setLoading, setError } = useUi();
   const [developers, setDevelopers] = useState([]);
-  const { onlineUsers } = useAuth();
+  const { onlineUsers, user } = useAuth();
 
   const [aiRecommendations, setAiRecommendations] = useState([]);
   const [activeTab, setActiveTab] = useState('discover'); // 'discover' | 'ai'
@@ -272,7 +272,40 @@ const DevelopersPage = () => {
         {/* AI MATCH TAB */}
         {activeTab === 'ai' && (
           <>
-            {aiLoading ? (
+            {!user?.isPremium ?
+             (
+              // Show this box if user is a free member
+              <div className="glass-card" style={{ 
+                padding: '48px 24px', 
+                textAlign: 'center', 
+                maxWidth: '550px', 
+                margin: '40px auto',
+                borderColor: 'rgba(245, 158, 11, 0.3)',
+                boxShadow: '0 0 30px rgba(245, 158, 11, 0.1)'
+              }}>
+                <div style={{ fontSize: '64px', marginBottom: '20px' }}>👑</div>
+                <h2 style={{ color: '#f1f5f9', fontSize: '24px', fontWeight: '800', marginBottom: '12px' }}>
+                  DevMatch <span style={{ color: '#fcd34d' }}>Premium</span> Feature
+                </h2>
+                <p style={{ color: '#94a3b8', fontSize: '14px', lineHeight: '1.6', marginBottom: '28px' }}>
+                  Unlock AI Matching to let Gemini analyze your stack, bio, and experience level, and recommend the best rank-ordered developers for you!
+                </p>
+                <button 
+                  className="btn-primary" 
+                  onClick={() => navigate('/premium')}
+                  style={{
+                    padding: '12px 32px',
+                    borderRadius: '10px',
+                    fontWeight: '700',
+                    fontSize: '15px',
+                    border: '1px solid rgba(245, 158, 11, 0.4)',
+                    boxShadow: '0 0 20px rgba(245, 158, 11, 0.15)'
+                  }}
+                >
+                  Unlock AI Matches Now
+                </button>
+              </div>
+            ): aiLoading ? (
               <div style={{ textAlign: 'center', padding: '80px 20px' }}>
                 <div style={{ fontSize: '48px', marginBottom: '16px', animation: 'pulse 1.5s infinite' }}>🤖</div>
                 <h3 style={{ color: '#f1f5f9', fontSize: '20px', fontWeight: '600', marginBottom: '8px' }}>
