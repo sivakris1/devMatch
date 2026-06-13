@@ -36,7 +36,7 @@ const PremiumPage = () => {
 
       // 3. Configure Razorpay checkout options
       const options = {
-        key: import.meta.env.VITE_RAZORPAY_KEY_ID, // public key
+        key: orderRes.data.key_id, // Read key from backend response
         amount: order.amount,
         currency: order.currency,
         name: "DevMatch Premium",
@@ -73,7 +73,7 @@ const PremiumPage = () => {
       paymentObject.open();
     } catch (error) {
       console.error(error);
-      toast.error("Failed to initiate payment");
+      toast.error(error.message);
     } finally {
       setLoading(false);
     }
