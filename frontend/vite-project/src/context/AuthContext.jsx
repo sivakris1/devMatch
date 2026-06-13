@@ -77,6 +77,22 @@ export const AuthProvider = ({ children }) => {
     
   },[user])
 
+  
+  // Sync user profile from database on page load/mount
+  useEffect(() => {
+    const syncProfile = async () => {
+      if (token) {
+        try {
+          const res = await api.get('/profile');
+          setUser(res.data.data);
+        } catch (err) {
+          console.error("Failed to sync profile:", err);
+        }
+      }
+    };
+    syncProfile();
+  }, [token]);
+
 
   const login = ({ token, user }) => {
     setToken(token);
