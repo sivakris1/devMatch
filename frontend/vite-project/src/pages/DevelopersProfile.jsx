@@ -102,6 +102,8 @@ export default function DevelopersProfile() {
             }}
           />
 
+          
+
           {/* Profile Header */}
           <div
             style={{
@@ -130,9 +132,15 @@ export default function DevelopersProfile() {
                   fontWeight: "800",
                   color: "#f1f5f9",
                   margin: "0 0 8px 0",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "8px"
                 }}
               >
                 {developer.name}
+                {developer.isPremium && (
+                  <span style={{ color: "#fcd34d", fontSize: "20px" }} title="Premium Member">👑</span>
+                )}
               </h1>
               <div
                 style={{
