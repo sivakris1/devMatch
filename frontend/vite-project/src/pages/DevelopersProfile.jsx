@@ -82,7 +82,13 @@ export default function DevelopersProfile() {
         {/* Profile Card */}
         <div
           className="glass-card fade-in-up"
-          style={{ padding: "36px", overflow: "hidden" }}
+          style={{ 
+            padding: "36px", 
+            overflow: "hidden",
+            // Gold border and subtle glow if developer is premium
+            borderColor: developer.isPremium ? "rgba(245, 158, 11, 0.4)" : "rgba(99, 102, 241, 0.2)",
+            boxShadow: developer.isPremium ? "0 10px 30px rgba(245, 158, 11, 0.08)" : "none"
+          }}
         >
           {/* Top gradient accent */}
           <div
