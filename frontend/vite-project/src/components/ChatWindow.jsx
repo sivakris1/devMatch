@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import socket from "../api/socket";
 import api from "../api/client";
 import { useAuth } from "../context/AuthContext";
-
+import { Link } from "react-router-dom"; 
 
 export default function ChatWindow({
   currentUserId,
@@ -104,9 +104,25 @@ export default function ChatWindow({
       }}>
         <div>
                   <div>
-          <p style={{ margin: 0, fontWeight: '700', color: '#f1f5f9', fontSize: '15px' }}>
-            💬 {receiverName}
+          <p style={{ margin: 0, fontWeight: '700', fontSize: '15px' }}>
+            <Link 
+              to={`/developers/${receiverId}`}
+              style={{ 
+                textDecoration: 'none', 
+                color: '#f1f5f9',
+                transition: 'color 0.2s ease',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '4px'
+              }}
+              // Light purple color when hovered to show it is clickable!
+              onMouseEnter={e => e.target.style.color = '#a5b4fc'}
+              onMouseLeave={e => e.target.style.color = '#f1f5f9'}
+            >
+              💬 {receiverName}
+            </Link>
           </p>
+          
           <p style={{ margin: 0, fontSize: '11px', color: isOnline ? '#6ee7b7' : '#94a3b8' }}>
             ● {isOnline ? 'Online' : 'Offline'}
           </p>
