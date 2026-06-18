@@ -1,9 +1,19 @@
 import auth from "../middleware/auth.js";
 import User from "../models/User.js";
-import express from "express";
+import express from "express";import upload from "../config/multer.js";         // A. Import multer
+import { v2 as cloudinary } from "cloudinary";                                 // B. Import Cloudinary
+import { Readable } from "stream";                                            // C. Import Node stream helper
+
 
 const router = express.Router();
 
+
+// Configure Cloudinary with your dashboard credentials
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
 router.get("/", auth, async (req, res) => {
   try {
     const user = await User.findById(req.userId).select("-password");
@@ -154,5 +164,48 @@ router.get("/:userId", async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 });
+
+// PUT /api/profile/avatar - Upload user avatar to Cloudinary
+router.put('/avatar', auth, upload.single('avatar'), async (req, res) => {
+  try {
+    // A. Check if Multer actually received a file
+    if (!req.file) {
+      return res.status(400).json({ message: 'No file uploaded' });
+    }
+
+    // B. Create a Cloudinary upload stream
+    const uploadStream = cloudinary.uploader.upload_stream(
+      { folder: 'devmatch_avatars' }, // Saves images inside a specific folder in your Cloudinary space
+      async (error, result) => {
+        if (error) {
+          console.error('Cloudinary upload error:', error);
+          return res.status(500).json({ message: 'Failed to upload image to cloud' });
+        }
+
+        // C. Save the secure Cloudinary URL (result.secure_url) to MongoDB
+        const updatedUser = await User.findByIdAndUpdate(
+          req.userId,
+          { avatar: result.secure_url },
+          { new: true }
+        ).select('-password');
+
+        // D. Return the updated user object to the frontend
+        res.json({
+          success: true,
+          message: 'Avatar uploaded successfully',
+          data: updatedUser,
+        });
+      }
+    );
+
+    // E. Pipe the memory file buffer directly into the Cloudinary upload stream
+    Readable.from(req.file.buffer).pipe(uploadStream);
+
+  } catch (error) {
+    console.error('Avatar upload error:', error);
+    res.status(500).json({ message: 'Server error during upload' });
+  }
+});
+
 
 export default router;
