@@ -42,6 +42,55 @@ export default function ProfilePage() {
     load();
   }, [logout]);
 
+    const [uploading, setUploading] = useState(false);
+
+  const handleAvatarChange = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    // A. Size Validation: Max 2MB
+    if (file.size > 2 * 1024 * 1024) {
+      toast.error("File size cannot exceed 2MB!");
+      return;
+    }
+
+    // B. Type Validation: Only images
+    const allowedTypes = ["image/jpeg", "image/png", "image/jpg"];
+    if (!allowedTypes.includes(file.type)) {
+      toast.error("Only JPG, JPEG, or PNG images are allowed!");
+      return;
+    }
+
+    // C. Package the file inside FormData (multipart/form-data)
+    const uploadData = new FormData();
+    uploadData.append("avatar", file);
+
+    setUploading(true);
+    try {
+      const res = await api.put("/profile/avatar", uploadData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+
+      if (res.data.success) {
+        toast.success("Profile picture updated! 📸");
+        
+        // Update local page state
+        setProfile((prev) => ({ ...prev, avatar: res.data.data.avatar }));
+        setFormData((prev) => ({ ...prev, avatar: res.data.data.avatar }));
+        
+        // Update global React context (so Navbar updates instantly)
+        updateUser(res.data.data);
+      }
+    } catch (err) {
+      toast.error(err.response?.data?.message || "Upload failed");
+    } finally {
+      setUploading(false);
+    }
+  };
+
+
   const removeSkill = (skillToRemove) => {
     setFormData((prev) => ({
       ...prev,
