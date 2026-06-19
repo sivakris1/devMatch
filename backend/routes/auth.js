@@ -50,6 +50,7 @@ router.post(
           name: user.name,
           email: user.email,
           isPremium: user.isPremium,
+          avatar: user.avatar,
         },
       });
     } catch (error) {
