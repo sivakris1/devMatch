@@ -87,11 +87,28 @@ export default function Navbar() {
           )}
         </Link>
 
-                <Link
+                 <Link
           to="/profile"
           className={`nav-link ${isActive('/profile') ? 'active' : ''}`}
+          style={{ display: 'flex', alignItems: 'center', gap: '6px' }}
         >
-          👤 Profile {user?.isPremium && <span style={{ color: '#fcd34d', marginLeft: '4px' }}>👑</span>}
+          {user?.avatar ? (
+            <img 
+              src={user.avatar} 
+              alt="Profile" 
+              style={{ 
+                width: '18px', 
+                height: '18px', 
+                borderRadius: '50%', 
+                objectFit: 'cover',
+                border: '1px solid rgba(255,255,255,0.2)'
+              }} 
+            />
+          ) : (
+            <span>👤</span>
+          )}
+          <span>Profile</span>
+          {user?.isPremium && <span style={{ color: '#fcd34d' }}>👑</span>}
         </Link>
 
         <button
