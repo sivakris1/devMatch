@@ -224,9 +224,21 @@ const DevelopersPage = () => {
                     style={{ padding: '24px', cursor: 'pointer', animationDelay: `${index * 0.05}s`, opacity: 0 }}
                     onClick={() => navigate(`/developers/${dev._id}`)}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '14px', marginBottom: '16px' }}>
-                      <div className="avatar" style={{ background: avatarColors[index % avatarColors.length] }}>
-                        {dev.name.charAt(0).toUpperCase()}
-                      </div>
+                                          <div style={{ display: 'flex', alignItems: 'center', gap: '14px', marginBottom: '16px' }}>
+                      
+                      {dev.avatar ? (
+                        <img 
+                          src={dev.avatar} 
+                          alt={dev.name} 
+                          className="avatar" 
+                          style={{ objectFit: 'cover' }} 
+                        />
+                      ) : (
+                        <div className="avatar" style={{ background: avatarColors[index % avatarColors.length] }}>
+                          {dev.name.charAt(0).toUpperCase()}
+                        </div>
+                      )}
+
                          <div style={{ flex: 1 }}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
                           <h3 style={{ color: '#f1f5f9', fontWeight: '700', fontSize: '16px', margin: 0 }}>{dev.name}</h3>
@@ -262,6 +274,7 @@ const DevelopersPage = () => {
                     <div style={{ borderTop: '1px solid rgba(255,255,255,0.06)', paddingTop: '14px', display: 'flex', justifyContent: 'flex-end' }}>
                       <span style={{ color: '#a5b4fc', fontSize: '13px', fontWeight: '600' }}>View Profile →</span>
                     </div>
+                  </div>
                   </div>
                 ))}
               </div>
