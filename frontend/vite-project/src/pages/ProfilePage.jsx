@@ -143,10 +143,85 @@ export default function ProfilePage() {
 
           {/* Header */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '20px', marginBottom: '28px' }}>
-            <div className="avatar avatar-lg" style={{ background: avatarColors[profile.name.charCodeAt(0) % avatarColors.length] }}>
-              {initials}
+            
+            {/* Clickable, Hover-Interactive Avatar Frame */}
+            <div 
+              onClick={() => document.getElementById('avatar-input').click()}
+              style={{
+                position: 'relative',
+                cursor: 'pointer',
+                borderRadius: '50%',
+                overflow: 'hidden',
+                width: '80px',
+                height: '80px',
+                flexShrink: 0,
+                boxShadow: '0 4px 12px rgba(0,0,0,0.3)',
+              }}
+              onMouseEnter={e => {
+                const overlay = e.currentTarget.querySelector('.avatar-overlay');
+                if (overlay) overlay.style.opacity = '1';
+              }}
+              onMouseLeave={e => {
+                const overlay = e.currentTarget.querySelector('.avatar-overlay');
+                if (overlay) overlay.style.opacity = '0';
+              }}
+            >
+              {profile.avatar ? (
+                // If they have an avatar URL, render the image
+                <img 
+                  src={profile.avatar} 
+                  alt="Avatar"
+                  style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                />
+              ) : (
+                // Otherwise render the default initials colored box
+                <div 
+                  className="avatar avatar-lg" 
+                  style={{ 
+                    width: '100%', 
+                    height: '100%', 
+                    background: avatarColors[profile.name.charCodeAt(0) % avatarColors.length] 
+                  }}
+                >
+                  {initials}
+                </div>
+              )}
+              
+              {/* Gold glassmorphic hover overlay */}
+              <div 
+                className="avatar-overlay"
+                style={{
+                  position: 'absolute',
+                  top: 0, left: 0, right: 0, bottom: 0,
+                  background: 'rgba(13, 14, 33, 0.75)',
+                  color: '#fcd34d',
+                  fontSize: '10px',
+                  fontWeight: '700',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  textTransform: 'uppercase',
+                  opacity: 0,
+                  transition: 'opacity 0.2s ease',
+                  textAlign: 'center',
+                  padding: '4px'
+                }}
+              >
+                {uploading ? '...' : 'Upload 📸'}
+              </div>
             </div>
+
+            {/* Hidden native file input element */}
+            <input 
+              type="file" 
+              id="avatar-input" 
+              accept=".png,.jpg,.jpeg" 
+              onChange={handleAvatarChange} 
+              style={{ display: 'none' }} 
+            />
+
             <div>
+
               <h2 style={{ color: '#f1f5f9', fontSize: '22px', fontWeight: '700', margin: '0 0 4px 0' }}>{profile.name}</h2>
               <p style={{ color: '#64748b', fontSize: '14px', margin: 0 }}>{profile.email}</p>
             </div>
