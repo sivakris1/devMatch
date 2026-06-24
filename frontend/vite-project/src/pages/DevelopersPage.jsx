@@ -219,13 +219,13 @@ const DevelopersPage = () => {
               </div>
             ) : (
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '20px' }}>
-                {developers.map((dev, index) => (
+                                {developers.map((dev, index) => (
                   <div key={dev._id} className="glass-card fade-in-up"
                     style={{ padding: '24px', cursor: 'pointer', animationDelay: `${index * 0.05}s`, opacity: 0 }}
                     onClick={() => navigate(`/developers/${dev._id}`)}>
+                    
+                    {/* Header Row */}
                     <div style={{ display: 'flex', alignItems: 'center', gap: '14px', marginBottom: '16px' }}>
-                                          <div style={{ display: 'flex', alignItems: 'center', gap: '14px', marginBottom: '16px' }}>
-                      
                       {dev.avatar ? (
                         <img 
                           src={dev.avatar} 
@@ -239,7 +239,7 @@ const DevelopersPage = () => {
                         </div>
                       )}
 
-                         <div style={{ flex: 1 }}>
+                      <div style={{ flex: 1 }}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
                           <h3 style={{ color: '#f1f5f9', fontWeight: '700', fontSize: '16px', margin: 0 }}>{dev.name}</h3>
                           {onlineUsers.includes(dev._id) && (
@@ -260,7 +260,10 @@ const DevelopersPage = () => {
                         <div className="match-badge">✨ {dev.skillOverlapCount}</div>
                       )}
                     </div>
+
+                    {/* Card Body */}
                     {dev.location && <p style={{ color: '#64748b', fontSize: '13px', margin: '0 0 14px 0' }}>📍 {dev.location}</p>}
+                    
                     <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px', marginBottom: '16px' }}>
                       {dev.skills.slice(0, 5).map((skill, i) => (
                         <span key={skill} className={`skill-tag ${i % 2 === 0 ? 'skill-tag-primary' : 'skill-tag-secondary'}`}>{skill}</span>
@@ -271,12 +274,14 @@ const DevelopersPage = () => {
                         </span>
                       )}
                     </div>
+
+                    {/* Card Footer */}
                     <div style={{ borderTop: '1px solid rgba(255,255,255,0.06)', paddingTop: '14px', display: 'flex', justifyContent: 'flex-end' }}>
                       <span style={{ color: '#a5b4fc', fontSize: '13px', fontWeight: '600' }}>View Profile →</span>
                     </div>
                   </div>
-                  </div>
                 ))}
+
               </div>
             )}
           </>
