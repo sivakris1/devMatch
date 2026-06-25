@@ -48,8 +48,9 @@ router.get('/conversations', auth, async (req, res) => {
       $or: [{ senderId: myId }, { receiverId: myId }]
     })
     .sort({ createdAt: -1 }) // newest first
-    .populate('senderId', 'name')
-    .populate('receiverId', 'name')
+        .populate('senderId', 'name avatar')
+    .populate('receiverId', 'name avatar')
+
 
     // Group by roomId — keep only LAST message per room
     const seen = new Set()
@@ -75,10 +76,12 @@ router.get('/conversations', auth, async (req, res) => {
           lastMessage: msg.message,
           lastMessageTime: msg.createdAt,
           unreadCount,
-          otherUser: {
+                    otherUser: {
             _id: otherUser._id,
-            name: otherUser.name
+            name: otherUser.name,
+            avatar: otherUser.avatar 
           }
+
         })
       }
     }
