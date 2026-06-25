@@ -105,64 +105,28 @@ export default function DevelopersProfile() {
           
 
           {/* Profile Header */}
-          <div
-            style={{
-              display: "flex",
-              alignItems: "flex-start",
-              gap: "20px",
-              marginBottom: "28px",
-            }}
-          >
-            <div
-              className="avatar avatar-lg"
-              style={{
-                background:
-                  avatarColors[
-                    developer.name.charCodeAt(0) % avatarColors.length
-                  ],
-                flexShrink: 0,
-              }}
-            >
-              {initials}
-            </div>
-            <div style={{ flex: 1 }}>
-              <h1
-                style={{
-                  fontSize: "26px",
-                  fontWeight: "800",
-                  color: "#f1f5f9",
-                  margin: "0 0 8px 0",
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "8px"
-                }}
-              >
-                {developer.name}
-                {developer.isPremium && (
-                  <span style={{ color: "#fcd34d", fontSize: "20px" }} title="Premium Member">👑</span>
-                )}
-              </h1>
+                      {developer.avatar ? (
+              <img 
+                src={developer.avatar} 
+                alt={developer.name} 
+                className="avatar avatar-lg" 
+                style={{ objectFit: 'cover', flexShrink: 0 }} 
+              />
+            ) : (
               <div
+                className="avatar avatar-lg"
                 style={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "10px",
-                  flexWrap: "wrap",
+                  background:
+                    avatarColors[
+                      developer.name.charCodeAt(0) % avatarColors.length
+                    ],
+                  flexShrink: 0,
                 }}
               >
-                <span
-                  className={`badge ${getBadgeClass(developer.experienceLevel)}`}
-                >
-                  {developer.experienceLevel}
-                </span>
-                {developer.location && (
-                  <span style={{ color: "#64748b", fontSize: "13px" }}>
-                    📍 {developer.location}
-                  </span>
-                )}
+                {initials}
               </div>
-            </div>
-          </div>
+            )}
+
           {/* message developer */}
           <button
             className="btn-primary"
