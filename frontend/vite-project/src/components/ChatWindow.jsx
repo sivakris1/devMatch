@@ -8,6 +8,7 @@ export default function ChatWindow({
   currentUserId,
   receiverId,
   receiverName,
+  receiverAvatar,
   onClose,
 }) {
   const [messages, setMessages] = useState([]);
@@ -95,6 +96,7 @@ export default function ChatWindow({
       boxShadow: '0 25px 50px rgba(0,0,0,0.5)'
     }}>
       {/* Header */}
+            {/* Header */}
       <div style={{
         padding: '16px 20px',
         borderBottom: '1px solid rgba(255,255,255,0.06)',
@@ -102,33 +104,61 @@ export default function ChatWindow({
         background: 'linear-gradient(135deg, rgba(99,102,241,0.15), rgba(139,92,246,0.1))',
         borderRadius: '16px 16px 0 0'
       }}>
-        <div>
-                  <div>
-          <p style={{ margin: 0, fontWeight: '700', fontSize: '15px' }}>
-            <Link 
-              to={`/developers/${receiverId}`}
-              style={{ 
-                textDecoration: 'none', 
-                color: '#f1f5f9',
-                transition: 'color 0.2s ease',
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '4px'
-              }}
-              // Light purple color when hovered to show it is clickable!
-              onMouseEnter={e => e.target.style.color = '#a5b4fc'}
-              onMouseLeave={e => e.target.style.color = '#f1f5f9'}
-            >
-              💬 {receiverName}
-            </Link>
-          </p>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
           
-          <p style={{ margin: 0, fontSize: '11px', color: isOnline ? '#6ee7b7' : '#94a3b8' }}>
-            ● {isOnline ? 'Online' : 'Offline'}
-          </p>
+          {/* Mini Avatar in Chat Header */}
+          {receiverAvatar ? (
+            <img 
+              src={receiverAvatar} 
+              alt={receiverName} 
+              style={{ 
+                width: '32px', 
+                height: '32px', 
+                borderRadius: '50%', 
+                objectFit: 'cover',
+                border: '1px solid rgba(255,255,255,0.15)' 
+              }} 
+            />
+          ) : (
+            <div style={{
+              width: '32px', height: '32px',
+              borderRadius: '50%',
+              background: 'linear-gradient(135deg, #6366f1, #8b5cf6)',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              fontWeight: '700', fontSize: '12px', color: 'white'
+            }}>
+              {receiverName.charAt(0).toUpperCase()}
+            </div>
+          )}
+
+          <div>
+            <p style={{ margin: 0, fontWeight: '700', fontSize: '15px' }}>
+              <Link 
+                to={`/developers/${receiverId}`}
+                style={{ 
+                  textDecoration: 'none', 
+                  color: '#f1f5f9',
+                  transition: 'color 0.2s ease'
+                }}
+                onMouseEnter={e => e.target.style.color = '#a5b4fc'}
+                onMouseLeave={e => e.target.style.color = '#f1f5f9'}
+              >
+                {receiverName}
+              </Link>
+            </p>
+            <p style={{ margin: 0, fontSize: '11px', color: isOnline ? '#6ee7b7' : '#94a3b8', display: 'flex', alignItems: 'center', gap: '4px' }}>
+              <span style={{
+                width: '6px', height: '6px',
+                background: isOnline ? '#10b981' : '#94a3b8',
+                borderRadius: '50%',
+                display: 'inline-block',
+                boxShadow: isOnline ? '0 0 6px #10b981' : 'none'
+              }} />
+              {isOnline ? 'Online' : 'Offline'}
+            </p>
+          </div>
         </div>
 
-        </div>
         <button onClick={onClose} style={{
           background: 'rgba(255,255,255,0.06)',
           border: '1px solid rgba(255,255,255,0.1)',
@@ -137,6 +167,7 @@ export default function ChatWindow({
           fontFamily: 'Inter, sans-serif'
         }}>✕</button>
       </div>
+
       {/* Messages */}
       <div style={{
         flex: 1, overflowY: 'auto',
