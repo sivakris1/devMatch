@@ -227,14 +227,16 @@ export default function MessagesPage() {
       </div>
 
       {/* ChatWindow — opens when a conversation is clicked */}
-      {selectedUser && (
+            {selectedUser && (
         <ChatWindow
           currentUserId={user?._id || user?.id}
           receiverId={selectedUser._id}
           receiverName={selectedUser.name}
+          receiverAvatar={selectedUser.avatar}
           onClose={() => setSelectedUser(null)}
         />
       )}
+
     </div>
   )
 }
