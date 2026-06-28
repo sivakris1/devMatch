@@ -1,6 +1,7 @@
 import { createContext, useContext, useState, useEffect } from "react";
 import { toast } from "react-toastify";
 import socket from "../api/socket";
+import api from "../api/client";
 
 const AuthContext = createContext(null);
 export const useAuth = () => useContext(AuthContext);
