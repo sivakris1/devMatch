@@ -36,6 +36,11 @@ DevMatch is a premium, full-stack developer matching and collaboration platform.
 - **HMAC Signature Verification:** Prevents payment faking using cryptographic verification on the backend.
 - **Premium Upgrades:** Automatically updates user accounts to Premium, unlocking exclusive features.
 
+### 📸 7. Cloudinary Avatar Uploads (Multer)
+- **Direct Cloud Uploads:** Uses Multer in-memory buffers (`multer.memoryStorage()`) to process uploaded images without writing temporary files to server disks.
+- **Cloudinary Stream API:** Pipes memory buffers directly to Cloudinary cloud storage securely.
+- **Global Avatars:** Hover-to-reveal profile upload triggers custom avatar rendering across the Navbar, Discover list cards, profiles, and Chat headers.
+
 ---
 
 ## 🛠️ Tech Stack
@@ -53,6 +58,7 @@ DevMatch is a premium, full-stack developer matching and collaboration platform.
 - **Socket.io** (WebSocket orchestration)
 - **JSON Web Tokens (JWT)** (Secure stateless authentication)
 - **Bcrypt.js** (Secure industry-standard password hashing)
+- **Multer** & **Cloudinary SDK** (Direct in-memory buffer streaming and secure cloud media hosting)
 
 ---
 
@@ -61,6 +67,8 @@ DevMatch is a premium, full-stack developer matching and collaboration platform.
 ```text
 devmatch/
 ├── backend/
+│   ├── config/
+│   │   └── multer.js
 │   ├── middleware/
 │   │   └── auth.js
 │   ├── models/
@@ -91,6 +99,7 @@ devmatch/
 │   │   │   ├── DevelopersProfile.jsx
 │   │   │   ├── LoginPage.jsx
 │   │   │   ├── MessagesPage.jsx
+│   │   │   ├── PremiumPage.jsx
 │   │   │   ├── ProfilePage.jsx
 │   │   │   └── RegisterPage.jsx
 │   │   ├── App.jsx
@@ -125,10 +134,19 @@ cd devmatch
    ```
 3. Create a `.env` file in the `backend/` root directory:
    ```env
-   PORT=5000
-   MONGODB_URI=your_mongodb_connection_string
-   JWT_SECRET=your_super_secret_jwt_key
-   GEMINI_API_KEY=your_gemini_api_token
+    PORT=5000
+    MONGODB_URI=your_mongodb_connection_string
+    JWT_SECRET=your_super_secret_jwt_key
+    GEMINI_API_KEY=your_gemini_api_token
+    
+    # Razorpay Credentials
+    RAZORPAY_KEY_ID=your_razorpay_key_id
+    RAZORPAY_KEY_SECRET=your_razorpay_key_secret
+    
+    # Cloudinary Credentials
+    CLOUDINARY_CLOUD_NAME=your_cloudinary_cloud_name
+    CLOUDINARY_API_KEY=your_cloudinary_api_key
+    CLOUDINARY_API_SECRET=your_cloudinary_api_secret
    ```
 4. Run the server in development mode:
    ```bash
