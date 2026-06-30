@@ -1,9 +1,11 @@
 import auth from "../middleware/auth.js";
 import User from "../models/User.js";
-import express from "express";import upload from "../config/multer.js";         // A. Import multer
-import { v2 as cloudinary } from "cloudinary";                                 // B. Import Cloudinary
-import { Readable } from "stream";                                            // C. Import Node stream helper
+import express from "express";import upload from "../config/multer.js";
+import { v2 as cloudinary } from "cloudinary";                                 
+import { Readable } from "stream";                                            
+import dotenv from 'dotenv'
 
+dotenv.config();
 
 const router = express.Router();
 
